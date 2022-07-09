@@ -3,7 +3,7 @@ The package is the implementation of artificial neural newtwork potential (ANNP)
 
 Installation:
 1. clon this package to your directory
-   git clon https://github.com/Zhang-CMS/annp-gpu-lammps.git
+   git clon https://github.com/inouejunyalab/zhang-annp-gpu-lammps.git
 
 2. copy all files in "lib" directory into lammps/lib/gpu directory
    cp ./lal_* ../lammps/lib/gpu;
