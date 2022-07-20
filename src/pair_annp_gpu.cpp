@@ -135,7 +135,8 @@ void PairANNPGPU::compute(int eflag, int vflag) {
         PairANNPGPU::update(eng_vdwl_annp, eatom_annp);
     }
     if (success && vflag)    virial_fdotr_compute(); 
-    //comm->reverse_comm();                                                                         
+    //comm->reverse_comm();                          
+    delete[]eatom_annp; 
 }
 
 /*---------------------------------------------------------------------
