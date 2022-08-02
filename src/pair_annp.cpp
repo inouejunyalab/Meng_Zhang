@@ -194,6 +194,15 @@ void PairANNP::compute(int eflag, int vflag)
                 Fi[k] += Fj[k];
                 f[j][k] += Fj[k];
             }
+            if(evflag) {
+                double delx = x[i][0]-x[j][0];
+                double dely = x[i][1]-x[j][1];
+                double delz = x[i][2]-x[j][2];
+                double fx = -Fj[0];
+                double fy = -Fj[1];
+                double fz = -Fj[2];
+                ev_tally_xyz(i, j, nlocal, force->newton_pair, 0.0, 0.0, fx, fy, fz, delx, dely, delz);
+            }
         }
         f[i][0] -= Fi[0];
         f[i][1] -= Fi[1];
