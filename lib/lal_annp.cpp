@@ -604,6 +604,6 @@ namespace LAMMPS_AL {
 		printf("calculat_time(ms).. %f\n", time_ca_all);
 		this->time_pair.stop();
 		return ainum;																				
-	}
+	} 
 	template class ANNP<PRECISION, ACC_PRECISION>;
 }
