@@ -71,6 +71,9 @@ namespace LAMMPS_AL {
 		_newj.alloc(_max_newj, *(this->ucl_device), UCL_READ_WRITE, UCL_READ_WRITE);
 		_host_acc.alloc(nall, *(this->ucl_device), UCL_READ_WRITE);
 
+		_virial2.alloc(_max_newj, *(this->ucl_device), UCL_READ_WRITE, UCL_READ_WRITE);
+		_virial4.alloc(_max_newj, *(this->ucl_device), UCL_READ_WRITE, UCL_READ_WRITE);
+		
 		_max_force = static_cast<int>(static_cast<double>(nall) * 1.10);
 		_force.alloc(_max_force, *(this->ucl_device), UCL_READ_WRITE, UCL_READ_WRITE);
 		_force.zero();
@@ -78,6 +81,10 @@ namespace LAMMPS_AL {
 		time_fp.zero();
 		time_ep.init(*(this->ucl_device));
 		time_ep.zero();
+		time_v2.init(*(this->ucl_device));
+		time_v2.zero();
+		time_v4.init(*(this->ucl_device));
+		time_v4.zero();
 
 		time_sh.init(*(this->ucl_device));
 		time_ca.init(*(this->ucl_device));
@@ -202,7 +209,8 @@ namespace LAMMPS_AL {
 		this->_max_bytes = _weight_all.row_bytes() + _bias_all.row_bytes() + _map.row_bytes() +
 						   _cutsq.row_bytes() + _flagact.row_bytes() + _Fj.row_bytes() +
 						   _dGij.row_bytes() + _sfnor_scal.row_bytes() + _sfnor_avg.row_bytes() +
-						   _force.row_bytes() + _newj.row_bytes() + _host_acc.row_bytes();
+						   _force.row_bytes() + _newj.row_bytes() + _host_acc.row_bytes() + 
+						   _virial2.row_bytes() + _virial4.row_bytes();
 
 		return 0;
 	}
@@ -218,6 +226,8 @@ namespace LAMMPS_AL {
 		time_sh.clear();
 		time_ca.clear();
 		time_up.clear();
+		time_v2.clear();
+		time_v4.clear();
 
 		_allocated = false;
 		_map.clear();
@@ -232,6 +242,8 @@ namespace LAMMPS_AL {
 		_Fj.clear();
 		_force.clear();
 		_dGij.clear();
+		_virial2.clear();
+		_virial4.clear();
 		this->clear_annp();
 	}
 
@@ -245,11 +257,11 @@ namespace LAMMPS_AL {
 	----------------------------------------------------------------------*/
 	template <class numtyp, class acctyp>
 	void ANNPMT::compute(double* eatom, double& eng_vdwl, double** f, const int f_ago, 
-						 const int inum_full, const int nall, const int nghost, 
-					     double** host_x, int* host_type, int* ilist, 
-						 int* numj, int** firstneigh, const bool eflag_in, 
-					     const bool vflag_in, const bool ea_flag, const bool va_flag, 
-						 int& host_start, const double cpu_time, bool& success) {
+			     const int inum_full, const int nall, const int nghost, 
+			     double** host_x, int* host_type, int* ilist, 
+			     int* numj, int** firstneigh, const bool eflag_in, 
+			     const bool vflag_in, const bool ea_flag, const bool va_flag, 
+			     int& host_start, const double cpu_time, bool& success, double **vatom_annp) {
 		 
 		this->acc_timers();
 		int eflag, vflag;
@@ -268,6 +280,8 @@ namespace LAMMPS_AL {
 		if (this->device->time_device()) {		
 			this->atom->add_transfer_time(time_fp.time());											
 			this->atom->add_transfer_time(time_ep.time());
+			this->atom->add_transfer_time(time_v2.time());
+			this->atom->add_transfer_time(time_v4.time());
 		}
 
 		if (inum_full == 0) {
@@ -307,8 +321,11 @@ namespace LAMMPS_AL {
 		time_ep.sync_stop();
 		if (eflag_in) {
 			for (int ii = 0; ii < red_blocks; ii++) {
-				eatom[ilist[ii]] += this->ans->engv[ii];
 				eng_vdwl += this->ans->engv[ii];
+			}
+			if(ea_flag)						
+			for (int ii = 0; ii < red_blocks; ii++) {
+				eatom[ii] += this->ans->engv[ii];
 			}
 		}
 	
@@ -327,7 +344,28 @@ namespace LAMMPS_AL {
 			f[idj][1] = _force[ii].y;
 			f[idj][2] = _force[ii].z;
 		}
+		if(va_flag) {
+			time_v2.start();
+			_virial2.update_host(nall, true);
+			time_v2.stop();
+			time_v2.sync_stop();
+			time_v4.start();
+			_virial4.update_host(nall, true);
+			time_v4.stop();
+			time_v4.sync_stop();
+			for(int ii = 0; ii < nall; ii++) {
+				vatom_annp[ii][0] = _virial4[ii].x;
+				vatom_annp[ii][1] = _virial4[ii].y;
+				vatom_annp[ii][2] = _virial4[ii].z;
+				vatom_annp[ii][3] = _virial4[ii].w;
+				vatom_annp[ii][4] = _virial2[ii].x;
+				vatom_annp[ii][5] = _virial2[ii].y;
+			}			
+		}
+			
 		_force.clear();
+		_virial2.clear();
+		_virial4.clear();
 		this->hd_balancer.stop_timer();
 	}
 
@@ -336,12 +374,12 @@ namespace LAMMPS_AL {
 	----------------------------------------------------------------------*/
 	template <class numtyp, class acctyp>
 	int** ANNPMT::compute(double* eatom, double& eng_vdwl, double** f, const int ago, 
-						  const int inum_full, const int nall, const int nghost, 
-						  double** host_x, int* host_type, double* sublo, double* subhi, 
-						  tagint* tag, int** nspecial, tagint** special, 
-						  const bool eflag_in, const bool vflag_in, const bool ea_flag, 
-						  const bool va_flag, int& host_start, int** ilist, 
-						  int** jnum, const double cpu_time, bool& success) {
+			      const int inum_full, const int nall, const int nghost, 
+			      double** host_x, int* host_type, double* sublo, double* subhi, 
+			      tagint* tag, int** nspecial, tagint** special, 
+			      const bool eflag_in, const bool vflag_in, const bool ea_flag, 
+			      const bool va_flag, int& host_start, int** ilist, 
+			      int** jnum, const double cpu_time, bool& success, double **vatom_annp) {
 		this->acc_timers();
 		int eflag, vflag;
 		if (ea_flag)	eflag = 2;																	
@@ -360,6 +398,8 @@ namespace LAMMPS_AL {
 		if (this->device->time_device()) {
 			this->atom->add_transfer_time(time_fp.time());											
 			this->atom->add_transfer_time(time_ep.time());
+			this->atom->add_transfer_time(time_v2.time());
+			this->atom->add_transfer_time(time_v4.time());
 		}
 		if (inum_full == 0) {
 			host_start = 0;	
@@ -375,7 +415,7 @@ namespace LAMMPS_AL {
 	
 		if (ago == 0) {
 			this->build_nbor_list(inum, inum_full - inum, nall, host_x, host_type,					
-								  sublo, subhi, tag, nspecial, special, success);
+					      sublo, subhi, tag, nspecial, special, success);
 			if (!success)
 				return nullptr;
 			this->hd_balancer.start_timer();
@@ -409,8 +449,11 @@ namespace LAMMPS_AL {
 		time_ep.sync_stop();
 		if (eflag_in) {
 			for (int ii = 0; ii < red_blocks; ii++) {
-				eatom[ii] += this->ans->engv[ii];
 				eng_vdwl += this->ans->engv[ii];
+			}
+			if(ea_flag)
+			for (int ii = 0; ii < red_blocks; ii++) {
+				eatom[ii] += this->ans->engv[ii];
 			}
 		}
 
@@ -426,7 +469,29 @@ namespace LAMMPS_AL {
 			f[idj][1] = _force[ii].y;
 			f[idj][2] = _force[ii].z;
 		}
+		
+		if(va_flag) {
+			time_v2.start();
+			_virial2.update_host(nall, true);
+			time_v2.stop();
+			time_v2.sync_stop();
+			time_v4.start();
+			_virial4.update_host(nall, true);
+			time_v4.stop();
+			time_v4.sync_stop();
+			for(int ii = 0; ii < nall; ii++) {
+				vatom_annp[ii][0] = _virial4[ii].x;
+				vatom_annp[ii][1] = _virial4[ii].y;
+				vatom_annp[ii][2] = _virial4[ii].z;
+				vatom_annp[ii][3] = _virial4[ii].w;
+				vatom_annp[ii][4] = _virial2[ii].x;
+				vatom_annp[ii][5] = _virial2[ii].y;
+			}			
+		}
+		
 		_force.clear();
+		_virial2.clear();
+		_virial4.clear();
 
 		this->hd_balancer.stop_timer();
 		return this->nbor->host_jlist.begin() - host_start;
@@ -502,6 +567,10 @@ namespace LAMMPS_AL {
 		_max_force = static_cast<int>(static_cast<double>(nall) * 1.10);
 		_force.alloc(_max_force, *(this->ucl_device), UCL_READ_WRITE, UCL_READ_WRITE);
 		_force.zero();
+		_virial2.alloc(_max_force, *(this->ucl_device), UCL_READ_WRITE, UCL_READ_WRITE);			
+		_virial4.alloc(_max_force, *(this->ucl_device), UCL_READ_WRITE, UCL_READ_WRITE);			
+		_virial2.zero();
+		_virial4.zero();
 
 		//*----------------- calculating the energy and force -------------------*/
 		for (int i = 0; i < nloop_GX; i++) {	
@@ -525,7 +594,8 @@ namespace LAMMPS_AL {
 
 			time_up.start();
 			this->k_updat.set_size(1, BX);																		
-			this->k_updat.run(&_newj, &_Fj, &_force, &begin_i, &_gpup);
+			this->k_updat.run(&this->atom->x, &_newj, &_Fj, &_force, &_virial2, 
+					  &_virial4, &eflag, &vflag, &begin_i, &_gpup);
 			time_up.stop();
 			time_up_all += time_up.time();															
 		}
