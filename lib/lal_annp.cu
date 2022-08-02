@@ -709,61 +709,133 @@ __kernel void k_annp(const __global numtyp4* restrict x_, const int ntypes,
 //----------------------------------------------------------------------
 	// updating the force for neighbor
 //----------------------------------------------------------------------
-__kernel void k_annp_updat(const __global int* restrict newj, 
-						   const __global acctyp4* restrict Fj,
-						   __global acctyp4* force,
-						   const int begin_i, const int2 gpup) {
+__kernel void k_annp_updat(const __global numtyp4* restrict x_,
+			   const __global int* restrict newj, 
+			   const __global acctyp4* restrict Fj,
+			   __global acctyp4* force,
+			   __global acctyp2* virial2,
+			   __global acctyp4* virial4,
+			   const int eflag, const int vflag, 
+			   const int begin_i, const int2 gpup) {
 
 	int max_nbor_size = gpup.x;
 	int num_atoms = gpup.y;
 	int tid = THREAD_ID_X;
 	__shared__ int ii;
+	__shared__ numtyp4 ix;
 
+	acctyp2 old_v2;
+	acctyp4 old_v4;
 	for (ii = 0; ii < num_atoms; ) {
 		__shared__ acctyp4 tFj[BLOCK_PAIR];
-		int n_jnum = newj[ii + begin_i];
+		__shared__ acctyp tvirial[BLOCK_PAIR][6];
+		int indexi = ii + begin_i;
+		int n_jnum = newj[indexi];
 		int begin_jk = ii * max_nbor_size;
+		fetch4(ix, indexi, pos_tex);																// get the value of x
+		
 		if (tid < n_jnum) {
 			int idj = begin_jk + tid;
-			int index = (int)Fj[idj].w;
+			int indexj = (int)Fj[idj].w;
 			tFj[tid].x = Fj[idj].x;
 			tFj[tid].y = Fj[idj].y;
 			tFj[tid].z = Fj[idj].z;
 
-			acctyp4 old_f = force[index];															
-			old_f.w = index;
+			acctyp4 old_f = force[indexj];															// old values
+			old_f.w = indexj;
 			old_f.x += tFj[tid].x;
 			old_f.y += tFj[tid].y;
 			old_f.z += tFj[tid].z;
-			force[index] = old_f;
+			force[indexj] = old_f;
+
+			numtyp4 jx; fetch4(jx, indexj, pos_tex);
+			numtyp delx = ix.x - jx.x;
+			numtyp dely = ix.y - jx.y;
+			numtyp delz = ix.z - jx.z;	
+			if(EVFLAG && vflag) {
+				tvirial[tid][0] = delx*-tFj[tid].x;
+				tvirial[tid][1] = dely*-tFj[tid].y;
+				tvirial[tid][2] = delz*-tFj[tid].z;
+				tvirial[tid][3] = delx*-tFj[tid].y;
+				tvirial[tid][4] = delx*-tFj[tid].z;
+				tvirial[tid][5] = dely*-tFj[tid].z;
+				old_v2 = virial2[indexj];
+				old_v4 = virial4[indexj];	
+				old_v4.x += 0.5 * tvirial[tid][0];
+				old_v4.y += 0.5 * tvirial[tid][1];
+				old_v4.z += 0.5 * tvirial[tid][2];
+				old_v4.w += 0.5 * tvirial[tid][3];
+				old_v2.x += 0.5 * tvirial[tid][4];
+				old_v2.y += 0.5 * tvirial[tid][5];
+				virial2[indexj] = old_v2;
+				virial4[indexj] = old_v4;
+			}		
 		}
 		for (unsigned int s = n_jnum / 2; s > 0; s >>= 1) {
+			int idtid = tid + s;
 			__syncthreads();
 			if (tid < s) {
-				tFj[tid].x += tFj[tid + s].x;
-				tFj[tid].y += tFj[tid + s].y;
-				tFj[tid].z += tFj[tid + s].z;
+				tFj[tid].x += tFj[idtid].x;
+				tFj[tid].y += tFj[idtid].y;
+				tFj[tid].z += tFj[idtid].z;
+				if(EVFLAG && vflag) {
+					tvirial[tid][0] += tvirial[idtid][0];
+					tvirial[tid][1] += tvirial[idtid][1];
+					tvirial[tid][2] += tvirial[idtid][2];
+					tvirial[tid][3] += tvirial[idtid][3];
+					tvirial[tid][4] += tvirial[idtid][4];
+					tvirial[tid][5] += tvirial[idtid][5];
+				}
 			}
 			__syncthreads();
-			if (s % 2 == 1 && s != 1 && tid == 0) {													
-				tFj[tid].x += tFj[tid + s - 1].x;
-				tFj[tid].y += tFj[tid + s - 1].y;
-				tFj[tid].z += tFj[tid + s - 1].z;
+			if (s % 2 == 1 && s != 1 && tid == 0) {
+				idtid -= 1;
+				tFj[tid].x += tFj[idtid].x;
+				tFj[tid].y += tFj[idtid].y;
+				tFj[tid].z += tFj[idtid].z;
+				if(EVFLAG && vflag) {
+					tvirial[tid][0] += tvirial[idtid][0];
+					tvirial[tid][1] += tvirial[idtid][1];
+					tvirial[tid][2] += tvirial[idtid][2];
+					tvirial[tid][3] += tvirial[idtid][3];
+					tvirial[tid][4] += tvirial[idtid][4];
+					tvirial[tid][5] += tvirial[idtid][5];
+				}
 			}
 		}
-
-		if (n_jnum % 2 == 1 && tid == 0) {															
-			tFj[tid].x += tFj[tid + n_jnum - 1].x;
-			tFj[tid].y += tFj[tid + n_jnum - 1].y;
-			tFj[tid].z += tFj[tid + n_jnum - 1].z;
+		if (n_jnum % 2 == 1 && tid == 0) {
+			int idtid = tid + n_jnum - 1;
+			tFj[tid].x += tFj[idtid].x;
+			tFj[tid].y += tFj[idtid].y;
+			tFj[tid].z += tFj[idtid].z;
+			if(EVFLAG && vflag) {
+				tvirial[tid][0] += tvirial[idtid][0];
+				tvirial[tid][1] += tvirial[idtid][1];
+				tvirial[tid][2] += tvirial[idtid][2];
+				tvirial[tid][3] += tvirial[idtid][3];
+				tvirial[tid][4] += tvirial[idtid][4];
+				tvirial[tid][5] += tvirial[idtid][5];
+			}
 		}
 		if (tid == 0) {
-			acctyp4 old_f = force[ii + begin_i];													
-			old_f.w = (numtyp)(ii + begin_i);
+			acctyp4 old_f = force[indexi];	
+			old_f.w = (numtyp)(indexi);
 			old_f.x -= tFj[tid].x;
 			old_f.y -= tFj[tid].y;
 			old_f.z -= tFj[tid].z;
-			force[ii + begin_i] = old_f;
+			force[indexi] = old_f;
+
+			old_v2 = virial2[indexi];
+			old_v4 = virial4[indexi];						
+			old_v4.x += 0.5 * tvirial[tid][0];
+			old_v4.y += 0.5 * tvirial[tid][1];
+			old_v4.z += 0.5 * tvirial[tid][2];
+			old_v4.w += 0.5 * tvirial[tid][3];
+			old_v2.x += 0.5 * tvirial[tid][4];
+			old_v2.y += 0.5 * tvirial[tid][5];
+			virial2[indexi] = old_v2;
+			virial4[indexi] = old_v4;
+
 		}
 		__syncthreads();		
 		ii++;
