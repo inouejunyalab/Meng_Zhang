@@ -99,22 +99,23 @@ int** annp_gpu_compute_n(double *eatom, double &eng_vdwl, double** f, const int 
                          int* host_type, double* sublo, double* subhi, tagint* tag, 
                          int** nspecial, tagint** special, const bool eflag, const bool vflag, 
                          const bool ea_flag, const bool va_flag, int& host_start, int** ilist,
-                         int** jnum, const double cpu_time, bool& success) {                        
+                         int** jnum, const double cpu_time, bool& success, double **vatom_annp) {                        
 
     return ANNPMF.compute(eatom, eng_vdwl, f, ago, inum, nall, nghost, 
                           host_x, host_type, sublo, subhi, tag, nspecial, 
                           special, eflag, vflag, ea_flag, va_flag, 
-                          host_start, ilist, jnum, cpu_time, success);
+                          host_start, ilist, jnum, cpu_time, success, vatom_annp);
 }
 void annp_gpu_compute(double* eatom, double& eng_vdwl, double** f, const int ago, 
                       const int inum, const int nall, const int nghost, double** host_x, 
                       int* host_type, int* ilist, int* numj, int** firstneigh, 
                       const bool eflag, const bool vflag, const bool ea_flag, 
-                      const bool va_flag, int& host_start, const double cpu_time, bool& success) {  
+                      const bool va_flag, int& host_start, const double cpu_time, 
+                      bool& success, double **vatom_annp) {  
     
     ANNPMF.compute(eatom, eng_vdwl, f, ago, inum, nall, nghost, host_x, 
                    host_type, ilist, numj, firstneigh, eflag, vflag, 
-                   ea_flag, va_flag, host_start, cpu_time, success);
+                   ea_flag, va_flag, host_start, cpu_time, success, vatom_annp);
 }
 
 double annp_gpu_bytes() {
