@@ -514,7 +514,7 @@ namespace LAMMPS_AL {
 		calculate energies, forces, and torques
 	----------------------------------------------------------------------*/
 	template <class numtyp, class acctyp>
-	int ANNPMT::loop_annp(const int eflag, const int nghost, const int nall) {
+	int ANNPMT::loop_annp(const int eflag, const int vflag, const int nghost, const int nall) {
 
 		const int BX = this->block_size();		
 		int GX = static_cast<int>(ceil(static_cast<double>(this->ans->inum()) /
