@@ -39,20 +39,18 @@ int annp_gpu_init(const int ntypes, const int inum, const int nall,
 
 void annp_gpu_clear();
 
-int** annp_gpu_compute_n(double *eatom_annp, double& eng_vdwl_annp, double** f, 
-                         const int ago, const int inum, const int nall, 
-                         const int nghost, double** host_x, int* host_type, 
-                         double* sublo, double* subhi, tagint* tag, int** nspecial, 
-                         tagint** special, const bool eflag, const bool vflag, 
-                         const bool ea_flag, const bool va_flag, int& host_start, 
-                         int** ilist, int** jnum, const double cpu_time, bool& success);
+int** annp_gpu_compute_n(double *eatom_annp, double& eng_vdwl_annp, double** f, const int ago, 
+                         const int inum, const int nall, const int nghost, double** host_x, 
+                         int* host_type, double* sublo, double* subhi, tagint* tag, int** nspecial, 
+                         tagint** special, const bool eflag, const bool vflag, const bool ea_flag, 
+                         const bool va_flag, int& host_start, int** ilist, int** jnum, 
+                         const double cpu_time, bool& success, double **vatom_annp);
 
-void annp_gpu_compute(double* eatom_annp, double& eng_vdwl_annp, double** f, 
-                      const int ago, const int inum, const int nall,
-                      const int nghost, double** host_x, int* host_type, 
-                      int* ilist, int* numj, int** firstneigh, const bool eflag, 
-                      const bool vflag, const bool ea_flag, const bool va_flag, 
-                      int& host_start, const double cpu_time, bool& success);
+void annp_gpu_compute(double* eatom_annp, double& eng_vdwl_annp, double** f, const int ago, 
+                      const int inum, const int nall, const int nghost, double** host_x, 
+                      int* host_type, int* ilist, int* numj, int** firstneigh, const bool eflag, 
+                      const bool vflag, const bool ea_flag, const bool va_flag, int& host_start, 
+                      const double cpu_time, bool& success, double **vatom_annp);
 
 double annp_gpu_bytes();
 
@@ -88,15 +86,11 @@ void PairANNPGPU::compute(int eflag, int vflag) {
     bool success = true;
     int *ilist, *numneigh, **firstneigh;
     double** f = atom->f;
+  
     double eng_vdwl_annp = 0.0;                                                                     
-    double* eatom_annp = new double[nall];                                                          
-    memset(eatom_annp, 0, sizeof(double) * nall);
-    for (int i = 0; i < nall; i++) {
-        memset(f[i], 0, sizeof(double) * 3);
-    }
-    for (int i = 0; i < nall; i++)
-        if (f[i][0] != 0 || f[i][1] != 0 || f[i][2] != 0)
-            printf("f0.... %d %d, %f %f %f\n", i, nall, f[i][0], f[i][1], f[i][2]);
+    double eng_vdwl_annp = 0.0; 
+    double* eatom_annp = LAMMPS_NS::Pair::eatom;
+    double** vatom_annp = LAMMPS_NS::Pair::vatom;  
 
     if(gpu_mode != GPU_FORCE) {
         double sublo[3],subhi[3];
@@ -115,7 +109,7 @@ void PairANNPGPU::compute(int eflag, int vflag) {
                                         inum, nall, nghost, atom->x, atom->type, sublo, 
                                         subhi, atom->tag, atom->nspecial, atom->special, 
                                         eflag, vflag, eflag_atom, vflag_atom, host_start, 
-                                        &ilist, &numneigh, cpu_time, success);
+                                        &ilist, &numneigh, cpu_time, success, vatom_annp);
     } else {
         inum = list->inum;
         ilist = list->ilist;
@@ -124,19 +118,13 @@ void PairANNPGPU::compute(int eflag, int vflag) {
         annp_gpu_compute(eatom_annp, eng_vdwl_annp, f, neighbor->ago, 
                          inum, nall, nghost, atom->x, atom->type, ilist, 
                          numneigh, firstneigh, eflag, vflag, eflag_atom, 
-                         vflag_atom, host_start, cpu_time, success);
+                         vflag_atom, host_start, cpu_time, success, vatom_annp);
     }
     if(!success)
         error->one(FLERR,"Insufficient memory on accelerator");
 
-
-    // updating the total energy, energy of each atoms, and virial force
-    if (success && eflag) {
-        PairANNPGPU::update(eng_vdwl_annp, eatom_annp);
-    }
     if (success && vflag)    virial_fdotr_compute(); 
-    //comm->reverse_comm();                          
-    delete[]eatom_annp; 
+    if (eflag) eng_vdwl = eng_vdwl_annp;
 }
 
 /*---------------------------------------------------------------------
