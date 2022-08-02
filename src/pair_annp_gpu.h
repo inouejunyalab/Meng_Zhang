@@ -30,11 +30,6 @@ namespace LAMMPS_NS {
 
         enum { GPU_FORCE, GPU_NEIGH, GPU_HYB_NEIGH };
 
-        virtual void update(double teng_vdwl, double* teatom) {                                     
-            eatom = teatom;
-            eng_vdwl = teng_vdwl;
-        }
-
     protected:                                                                                                               
         int gpu_mode;
         double cpu_time;
