@@ -59,7 +59,7 @@ namespace LAMMPS_AL {
 					  tagint* tag, int** nspecial, tagint** special, 
 					  const bool eflag, const bool vflag, const bool ea_flag, 
 					  const bool va_flag, int& host_start, int** ilist, 
-					  int** jnum, const double cpu_time, bool& success);
+					  int** jnum, const double cpu_time, bool& success, double **vatom_annp);
 
 		// the same as above, in the two "compute" functions, the "loop" in "lal_annp.cpp" 
 		void compute(double* eatom, double& eng_vdwl, double** f, const int ago, 
@@ -67,7 +67,7 @@ namespace LAMMPS_AL {
 					 double** host_x, int* host_type, int* ilist, 
 				     int* numj,	int** firstneigh, const bool eflag, 
 					 const bool vflag, const bool ea_flag, const bool va_flag, 
-					 int& host_start, const double cpu_time, bool& success);
+					 int& host_start, const double cpu_time, bool& success, double **vatom_annp);
 
 		/*---------------------------------------------------------------------
 			Device Kernels, Data, type Data
@@ -120,7 +120,7 @@ namespace LAMMPS_AL {
 	protected:
 		bool _allocated;
 		int loop(const int eflag, const int vflag);													
-		int loop_annp(const int eflag, const int nghost, const int nall);							
+		int loop_annp(const int eflag, const int vflag, const int nghost, const int nall);							
 	};
 }
 #endif
