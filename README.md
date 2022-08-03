@@ -12,7 +12,7 @@ Installation:
    (b) make -f Makefile.linux
    Note: 
    (a) if there is an error about no enough memory for __shared__ memory, please remove the __shared__ numtyp dG_dkx or dG_dky in "lal_annp.cu" file, then try again.
-   (b) the "n_Block" in "lal_annp.cpp" file can be changed to make sure that the n_Block*BX/t_per_atom (mostly, BX = 256, t_per_atom = 4) large than cores on your GPU card
+   (b) the "n_Block" in "lal_annp.cpp" file can be changed to make sure that the n_Block*BX/t_per_atom (mostly, BX = 256, t_per_atom = 4) larger than cores on your GPU card
 
 3. copy "pair_annp.*" in "src" directory into lammps/src/MANYBODY directory
    cp ./pair_annp.* ../lammps/src/MANYBODY;
