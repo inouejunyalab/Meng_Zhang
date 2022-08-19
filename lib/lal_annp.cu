@@ -73,7 +73,8 @@ _texture( sfav_tex,int2);
     }                                                                       \
     if(offset ==0) {                                                        \
         newj[ii] = num_in;                                                  \
-    }
+    }                                                                       \
+    simdsync();
 
 
 #define local_allocate_acc_dGij()                                           \
@@ -185,7 +186,8 @@ _texture( sfav_tex,int2);
     }                                                                       \
     if (offset == 0) {                                                      \
         newj[ii] = num_in;                                                  \
-    }
+    }                                                                       \
+    simdsync();
 
 #define local_allocate_acc_dGij()
 
@@ -329,7 +331,7 @@ __kernel void k_annp_short_nbor(const __global numtyp4* restrict x_,
 			dev_packed[begin_ou] = j_out[j];
 		}
 
-		nbor_info(dev_nbor, dev_packed, nbor_pitch, t_per_atom, ii,
+/*		nbor_info(dev_nbor, dev_packed, nbor_pitch, t_per_atom, ii,
 				  offset, i, jnum, n_stride, nbor_end, nbor_j);
 		for (; nbor_j < nbor_end; nbor_j += n_stride) {
 			int sj = dev_packed[nbor_j];
@@ -337,6 +339,7 @@ __kernel void k_annp_short_nbor(const __global numtyp4* restrict x_,
 			sj &= NEIGHMASK;
 			numtyp4 jx; fetch4(jx, sj, pos_tex);
 		}
+*/
 	}
 }
 
