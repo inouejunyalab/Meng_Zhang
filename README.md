@@ -2,8 +2,8 @@
 The package is the implementation of artificial neural newtwork potential (ANNP), which can be accelerated by using GPU card. You can compile these into LAMMPS package according to the following procedures. It can support the CUDA- and OpenCL-enabled GPU card. All the potential parameters are obtained from Dr. H. Mori, but the format are defined by us, as can be see the "fe_annp_potential.ann" file.
 
 Installation:
-1. clon this package to your directory by: 
-   git clon https://github.com/inouejunyalab/zhang-annp-gpu-lammps.git
+1. clone this package to your directory by: 
+   git clone https://github.com/inouejunyalab/zhang-annp-gpu-lammps.git
 
 2. copy all files in "lib" directory into lammps/lib/gpu directory by: 
    (1) cp ./lal_* ../lammps/lib/gpu;
