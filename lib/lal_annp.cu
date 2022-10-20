@@ -83,20 +83,20 @@ _texture( sfav_tex,int2);
 #define acc_dGij(dGij, dG_dkx, dG_dky, dG_dkz, begin_k,                     \
                  ntsf, tid, offset, t_per_atom)                             \
     for (int m = 0; m < ntsf; m++) {                                        \
-        red_acc[m][tid] = dG_dk[m].z;                                       \
+        red_accj[m][tid] = dG_dkz[m];                                       \
         for (unsigned int s = t_per_atom / 2; s > 0; s >>= 1) {             \
             simdsync();                                                     \
             if(offset < s) {                                                \
                 dG_dkx[m][tid] += dG_dkx[m][tid + s];                       \
                 dG_dky[m][tid] += dG_dky[m][tid + s];                       \
-                red_acc[m][tid] += red_acc[m][tid + s];                     \
+                red_accj[m][tid] += red_acc[m][tid + s];                    \
             }                                                               \
         }                                                                   \
         if(offset == 0) {                                                   \
             int index_bm = begin_k + m;                                     \
             dGij[index_bm].x += dG_dkx[m][tid];                             \
             dGij[index_bm].y += dG_dky[m][tid];                             \
-            dGij[index_bm].z += red_acc[m][tid];                            \
+            dGij[index_bm].z += red_accj[m][tid];                           \
         }                                                                   \
     }
 
