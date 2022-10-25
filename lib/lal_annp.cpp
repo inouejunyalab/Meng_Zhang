@@ -520,7 +520,7 @@ namespace LAMMPS_AL {
 		int GX = static_cast<int>(ceil(static_cast<double>(this->ans->inum()) /
 										(BX / this->_threads_per_atom)));
 		int n_Block = 200, nloop_GX = 0;
-		if (n_Block > GX) {
+		if (n_Block >= GX) {
 			n_Block = GX;
 			nloop_GX = 1;
 		}
