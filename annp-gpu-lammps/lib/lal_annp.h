@@ -106,6 +106,11 @@ namespace LAMMPS_AL {
 		int _max_force;
 		UCL_Timer time_fp, time_ep;
 		UCL_Vector<acctyp4, acctyp4> _force;
+		
+		// for virial of nall atoms
+		UCL_Timer time_v2, time_v4;
+		UCL_Vector<acctyp4, acctyp4> _virial4;
+		UCL_Vector<acctyp2, acctyp2> _virial2;
 
 		// type data
 		UCL_D_Vec<numtyp> _cutsq;																	 
