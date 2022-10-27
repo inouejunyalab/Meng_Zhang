@@ -6,4 +6,3 @@ If you want to create the dislocation accrding to your requirement, please note 
 (2) specify size of the box along (x,y,z) on line 26
 (3) specify the position the disloction core on line 250, but please be careful about the EDF decomposition on line 253. The code give us the structure 
 dislocation line parallel with the y axis <1,-1,1> direciton
-
