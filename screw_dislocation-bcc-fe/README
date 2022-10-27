@@ -1,0 +1,2 @@
+This package is used to create the bcc fe mode with dislocation. 
+The method used in the codes is the elastic deisplacement field: 𝑈_𝑧=𝑏/2𝜋 [𝑡𝑎𝑛]^(−1) (y/𝑥)
