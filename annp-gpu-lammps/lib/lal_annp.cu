@@ -89,7 +89,7 @@ _texture( sfav_tex,int2);
             if(offset < s) {                                                \
                 dG_dkx[m][tid] += dG_dkx[m][tid + s];                       \
                 dG_dky[m][tid] += dG_dky[m][tid + s];                       \
-                red_accj[m][tid] += red_acc[m][tid + s];                    \
+                red_accj[m][tid] += red_accj[m][tid + s];                   \
             }                                                               \
         }                                                                   \
         if(offset == 0) {                                                   \
