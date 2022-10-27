@@ -3,7 +3,7 @@ The package is the implementation of artificial neural newtwork potential (ANNP)
 
 Installation:
 1. clone this package to your directory by: 
-   git clone https://github.com/inouejunyalab/zhang-annp-gpu-lammps.git
+   git clone https://github.com/inouejunyalab/Meng_Zhang/tree/main/annp-gpu-lammps
 
 2. copy all files in "lib" directory into lammps/lib/gpu directory by: 
    (1) cp ./lal_* ../lammps/lib/gpu;
@@ -35,8 +35,8 @@ Installation:
    (2) pair_style	annp   pair_style	* * fe_annp_potential.ann Fe
 
 Reference:
-1. H. Mori, T. Ozaki, Phys Rev Mater 4(4) (2020).
-2. N. Artrith and A. Urban, Comput. Mater. Sci. 114, 135 (2016).
+1. N. Artrith and A. Urban, Comput. Mater. Sci. 114, 135 (2016).
+2. H. Mori, T. Ozaki, Phys Rev Mater 4(4) (2020).
 3. S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
 Author & contact information
