@@ -36,7 +36,7 @@ PPF::PPF() {                                                                    
     Qb = XXXXX;                                                                 //  j/mol
     R = XXXXX;                                                                  //  j/(K*mol)
     T = XXXXX;                                                                  //  T is Kelvin's temperature
-    thigma = 5 * deltaX;                                                        // delta x is 0.5um£¬use the 'm'
+    thigma = 5 * deltaX;                                                        // delta x is 0.5umÂ£Â¬use the 'm'
     W = 4 * garma / thigma;        
     a = (2 / PI) * pow(2 * thigma * garma, 0.5);
     Mij = B * 1.1e-13 / K / T * exp(-Qb / (R * T));                             //GB mobility
