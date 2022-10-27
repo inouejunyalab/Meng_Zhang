@@ -313,7 +313,7 @@ namespace LAMMPS_AL {
 		time_sh_all = 0.0;																			
 		time_ca_all = 0.0;																					
 		time_up_all = 0.0;																			
-		const int red_blocks = loop_annp(eflag, nghost, nall);
+		const int red_blocks = loop_annp(eflag, vflag, nghost, nall);
 
 		time_ep.start();
 		this->ans->engv.update_host(red_blocks, true);
@@ -441,7 +441,7 @@ namespace LAMMPS_AL {
 		time_sh_all = 0.0;
 		time_ca_all = 0.0;
 		time_up_all = 0.0;
-		const int red_blocks = loop_annp(eflag, nghost, nall);
+		const int red_blocks = loop_annp(eflag, vflag, nghost, nall);
 
 		time_ep.start();
 		this->ans->engv.update_host(red_blocks, true);
