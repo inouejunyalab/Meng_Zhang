@@ -88,7 +88,6 @@ void PairANNPGPU::compute(int eflag, int vflag) {
     double** f = atom->f;
   
     double eng_vdwl_annp = 0.0;                                                                     
-    double eng_vdwl_annp = 0.0; 
     double* eatom_annp = LAMMPS_NS::Pair::eatom;
     double** vatom_annp = LAMMPS_NS::Pair::vatom;  
 
