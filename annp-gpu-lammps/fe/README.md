@@ -55,7 +55,7 @@
 
 
 ## Update and release:
-[GitHub] (https://github.com/inouejunyalab/Meng_Zhang/tree/main/annp-gpu-lammps)
+[GitHub] (https://github.com/inouejunyalab/Meng_Zhang/tree/main/annp-gpu-lammps/fe)
 
 
 ## Contact Information:
