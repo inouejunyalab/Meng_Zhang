@@ -3,7 +3,7 @@
 ## Description: 
 -This package is used to implement of artificial neural network potential (ANNP), which can be accelerated by using GPU card.
 -You can compile these into LAMMPS package according to the following procedures. It can support the CUDA- and OpenCL-enabled GPU card.
--All the potential parameters (Ni) are obtained from Dr. S. Desai, Dr. S.T. Reeve and co-workers (Reference 1 and 2), but the format is defined by us, as can be see the "ni_annp_potential_2.ann" file. 
+-All the potential parameters (Ni) are obtained from Dr. S. Desai, Dr. S.T. Reeve and co-workers (References 1 and 2), but the format is defined by us, as can be see the "ni_annp_potential_2.ann" file. 
 
 -The files in the lib folder are the library, which should be complied into lammps/lib/GPU package.
 -The files in the src folder are the source files, which provide the interface to lammps.
