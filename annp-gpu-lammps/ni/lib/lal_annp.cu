@@ -608,18 +608,18 @@ __kernel void k_annp_updat(const __global numtyp4* restrict x_,
 		int indexi = ii + begin_i;
 		int n_jnum = newj[indexi];
 		int begin_jk = ii * max_nbor_size;
-		int begin_i = begin_jk + ii;
+		int begin_ti = begin_jk + ii;
 		fetch4(ix, indexi, pos_tex);															
 		
 		if (tid == 0) {																		
 			acctyp4 old_f = force[indexi];
-			old_f.x += Fj[begin_i].x;
-			old_f.y += Fj[begin_i].y;
-			old_f.z += Fj[begin_i].z;
+			old_f.x += Fj[begin_ti].x;
+			old_f.y += Fj[begin_ti].y;
+			old_f.z += Fj[begin_ti].z;
 			force[indexi] = old_f;
 		}
 		if (tid < n_jnum) {
-			int idj = begin_i + tid + 1;
+			int idj = begin_ti + tid + 1;
 			int indexj = (int)Fj[idj].w;
 			tFj[tid].x = Fj[idj].x;
 			tFj[tid].y = Fj[idj].y;
