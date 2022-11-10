@@ -1,4 +1,4 @@
-# Introduce screw dislocaiton into Fe
+## Introduce screw dislocaiton into Fe
 
 This package is used to create the bcc fe mode with dislocation. 
 The method used in the codes is the elastic deisplacement field (EDF): 𝑈_𝑧=𝑏/2𝜋 [𝑡𝑎𝑛]^(−1) (z/𝑥)
