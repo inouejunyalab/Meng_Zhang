@@ -13,5 +13,5 @@ References:
 
 
 ## License
-Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp) and Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp) 
+Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp) and Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp). 
 The __grain-growth(2D)-phase-field__ source code is distributed under a Mozilla Public License, V. 2.0.
