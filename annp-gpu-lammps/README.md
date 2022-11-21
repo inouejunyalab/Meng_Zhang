@@ -9,5 +9,5 @@ Reference:
 1) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
 ## License
-Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp), Koki Hibi (koki_hibi@metall.t.u-tokyo.ac.jp), Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp)
+Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp), Koki Hibi (koki_hibi@metall.t.u-tokyo.ac.jp), Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp).
 The __annp-gpu-lammps__ source code is distributed under a Mozilla Public License, V. 2.0.
