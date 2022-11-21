@@ -10,3 +10,8 @@ References:
 2) Takaki, T., Yoshimoto, C., Yamanaka, A., et.al., 2014. Int. J. Plast. 52, 105–116. https://doi.org/10.1016/j.ijplas.2013.09.001.
 3) Zhang, M., Xu, T., Li, M.E, et. al., 2019. Comp Mater Sci. 163, 162-166. https://doi.org/10.1016/j.commatsci.2019.03.026. 
 4) Zhang, M., Rao, Z.X., Xu, T., et. al., 2020. Int. J. Plast. 135, 102846. https://doi.org/10.1016/j.ijplas.2020.102846.
+
+
+## License
+Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp) and Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp) 
+The __grain-growth(2D)-phase-field__ source code is distributed under a Mozilla Public License, V. 2.0.
