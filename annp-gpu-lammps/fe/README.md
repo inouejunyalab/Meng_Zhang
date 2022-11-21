@@ -61,3 +61,7 @@
 ## Contact Information:
 Email: meng_zhang@metall.t.u-tokyo.ac.jp (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue)
 Please contact us if you have any questions or suggestion for the implementation
+
+## License
+Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp), Koki Hibi (koki_hibi@metall.t.u-tokyo.ac.jp), Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp).
+The source code is distributed under a Mozilla Public License, V. 2.0.
