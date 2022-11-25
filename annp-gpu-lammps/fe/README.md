@@ -15,7 +15,7 @@
 2) copy all files in the "lib" directory into lammps/lib/gpu directory \
    cp ./lal_* ../lammps/lib/gpu \
    
-   Note: 
+   Note: \
    (a) set correct value of GPU_ARCH in "Makefile.linux" \
    (b) make -f Makefile.linux \
    (c) the "n_Block" in "lal_annp.cpp" file can be changed to make sure that the n_Block*BX/t_per_atom (mostly, BX = 256, t_per_atom = 4) large than cores on your GPU card
