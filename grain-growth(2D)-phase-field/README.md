@@ -1,7 +1,7 @@
 ## Grain-growth by Phase field model
 
 This package is used to simulate grain growth by using phase field model.
-The phase field is created by Prof. Takaki [1]. If you want to use these codes, please given an citation [1-4]. Thanks.
+The phase field model is created by Prof. Takaki [1]. If you want to use these codes, please given an citation [1-4]. Thanks.
 
 Note: phase field parameters on lines 30-38 of "gg_def.cpp" file must be specfied. 
 
