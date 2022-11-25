@@ -54,8 +54,8 @@
 
 
 ## References:
-1) S. Desai, S.T. Reeve, J.F. Belak, Comput. Phys. Commun. 270, (2022).
-2) J. Behler, M. Parrinello, Phys Rev Lett, 98 (2007).
+1) S. Desai, S.T. Reeve, J.F. Belak, Comput. Phys. Commun. 270 (2022).
+2) J. Behler, M. Parrinello, Phys Rev Lett. 98 (2007).
 3) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
 
