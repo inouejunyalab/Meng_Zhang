@@ -10,7 +10,7 @@
 -If you compile the lammps package, please be careful about the GPU_ARCH, which must be consistent with your GPU cards
 
 ## Installation:
-1) Download all files in "lib", "src" directors and the potential file  
+1) download all files in "lib", "src" directors and the potential file  
 
 2) copy all files in the "lib" directory into lammps/lib/gpu directory \
    cp ./lal_* &#8195; lammps_PATH/lib/gpu
