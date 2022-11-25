@@ -53,7 +53,7 @@
 
 
 ## References:
-1) H. Mori, T. Ozaki, Phys Rev Mater 4(4) (2020).
+1) H. Mori, T. Ozaki, Phys Rev Mater. 4, 040601(R) (2020).
 2) N. Artrith and A. Urban, Comput. Mater. Sci. 114, 135 (2016).
 3) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
