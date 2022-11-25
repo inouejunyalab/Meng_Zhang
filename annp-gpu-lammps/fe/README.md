@@ -21,10 +21,10 @@
    (c) the "n_Block" in "lal_annp.cpp" file can be changed to make sure that the n_Block*BX/t_per_atom (mostly, BX = 256, t_per_atom = 4) large than cores on your GPU card
 
 3) copy "pair_annp.h and pair_annp.cpp" in the "src" directory into lammps/src/MANYBODY directory \
-   cp ./pair_annp.h &#8195; &#8194; lammps_PATH/src/MANYBODY \
+   cp ./pair_annp.h &#8195; &#8194; &#160; lammps_PATH/src/MANYBODY \
    cp ./pair_annp.cpp &#8195; lammps_PATH/src/MANYBODY 
 4) copy "pair_annp_gpu.h and pair_annp_gpu.cpp" in the "src" directory into lammps/src/GPU directory \
-   cp ./pair_annp_gpu.h &#8195; &#8194; lammps_PATH/src/GPU \
+   cp ./pair_annp_gpu.h &#8195; &#8194; &#160; lammps_PATH/src/GPU \
    cp ./pair_annp_gpu.cpp &#8195; lammps_PATH/src/GPU \
    add the name of the two "pair_annp_gpu*" files into Install.h file in GPU directory
 
