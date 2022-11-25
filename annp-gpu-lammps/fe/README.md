@@ -13,7 +13,7 @@
 1) Download all files in "lib", "src" directors and the potential file  
 
 2) copy all files in the "lib" directory into lammps/lib/gpu directory \
-   cp ./lal_* lammps_PATH/lib/gpu
+   cp ./lal_* &#8195; lammps_PATH/lib/gpu
    
    Note: \
    (a) set correct value of GPU_ARCH in "Makefile.linux" \
