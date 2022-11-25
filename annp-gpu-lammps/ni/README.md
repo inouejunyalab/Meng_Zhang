@@ -1,44 +1,49 @@
 ## ANNP-GPU-Lammps (GPU-accelerated artificial neural network potential for molecular dynamics simulation)
 
 ## Description: 
--This package is used to implement of artificial neural network potential (ANNP), which can be accelerated by using GPU card.
--You can compile these into LAMMPS package according to the following procedures. It can support the CUDA- and OpenCL-enabled GPU card.
+-This package is used to implement of artificial neural network potential (ANNP), which can be accelerated by using GPU card. \
+-You can compile these into LAMMPS package according to the following procedures. It can support the CUDA- and OpenCL-enabled GPU card. \
 -All the potential parameters (Ni) are obtained from Dr. S. Desai, Dr. S.T. Reeve and co-workers (References 1 and 2), but the format is defined by us, as can be see the "ni_annp_potential_2.ann" file. 
 
--The files in the lib folder are the library, which should be complied into lammps/lib/GPU package.
--The files in the src folder are the source files, which provide the interface to lammps.
+-The files in the lib folder are the library, which should be complied into lammps/lib/GPU package. \
+-The files in the src folder are the source files, which provide the interface to lammps. \
 -If you compile the lammps package, please be careful about the GPU_ARCH, which must be consistent with your GPU cards
 
+
 ## Installation:
-1) Download all files in "lib", "src" directors and the potential file 
+1) Download all files in "lib", "src" directors and the potential file  
 
-2) copy all files in "lib" directory into lammps/lib/gpu directory
-   cp ./lal_* ../lammps/lib/gpu;
-   (a) set correct value of GPU_ARCH in "Makefile.linux"
-   (b) make -f Makefile.linux
-   Note: the "n_Block" in "lal_annp.cpp" file can be changed to make sure that most of cores on GPU card busy
+2) copy all files in the "lib" directory into lammps/lib/gpu directory \
+   cp ./lal_* ../lammps/lib/gpu \
+   
+   Note: \
+   (a) set correct value of GPU_ARCH in "Makefile.linux" \
+   (b) make -f Makefile.linux \
+   (c) the "n_Block" in "lal_annp.cpp" file can be changed to make sure that the n_Block*BX/t_per_atom (mostly, BX = 256, t_per_atom = 4) large than cores on your GPU card
 
-3) copy "pair_annp.*" in "src" directory into lammps/src/MANYBODY directory
-   cp ./pair_annp.* ../lammps/src/MANYBODY;
-4) copy "pair_annp_gpu.*" in "src" directory into lammps/src/GPU directory 
-   cp ./pair_annp_gpu.* ../lammps/src/GPU;
+3) copy "pair_annp.h and pair_annp.cpp" in the "src" directory into lammps/src/MANYBODY directory \
+   cp ./pair_annp.h         LAMMPS_PATH/src/MANYBODY \
+   cp ./pair_annp.cpp       LAMMPS_PATH/src/MANYBODY 
+4) copy "pair_annp_gpu.h and pair_annp_gpu.cpp" in the "src" directory into lammps/src/GPU directory \
+   cp ./pair_annp_gpu.h     LAMMPS_PATH/src/GPU \
+   cp ./pair_annp_gpu.cpp   LAMMPS_PATH/src/GPU \
    add the name of the two "pair_annp_gpu*" files into Install.h file in GPU directory
 
 5) make mpi
 
-6) If you want to use OpenCL library, it's better using the cmake to compile lammps by following procedures:
-   mkdir build_opencl
-   cmake ../cmake -C ../cmake/presets/basic.cmake -D PKG_GPU=on -D GPU_API=opencl -D GPU_PREC=mixed -D GPU_ARCH=sm_61;
-   make;
-   sudo make install
+6) If you want to use OpenCL library, it's better using the cmake to compile lammps by following procedures: \
+   mkdir build_opencl \
+   cmake ../cmake -C ../cmake/presets/basic.cmake -D PKG_GPU=on -D GPU_API=opencl -D GPU_PREC=mixed -D GPU_ARCH=sm_61 \
+   make \
+   sudo make install \
    Note: the definition of shared memory in cuda must be changed into local (__shared__ ----> __local) in the "lal_annp.cu" file  
 
 
 ## MD simulation in Lammps:
-1) the Newton third law must be opened:  
+1) the Newton third law must be opened: \
    newton on
-2) pair_style	annp
-   pair_style	* * ni_annp_potential.ann Ni
+2) pair_style	annp \
+   pair_style	* * fe_annp_potential.ann Fe
 
 
 ## Tested systems, GPU cards, Lammps version:
