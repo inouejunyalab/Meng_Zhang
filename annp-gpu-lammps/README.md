@@ -6,7 +6,7 @@ This package contains some GPU-implementations of artificial neural network pote
 Please contact us if you have any questions or suggestion for the implementation:
 meng_zhang@metall.t.u-tokyo.ac.jp (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue) 
 
-Reference:
+## Reference:
 1) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
 ## License:
