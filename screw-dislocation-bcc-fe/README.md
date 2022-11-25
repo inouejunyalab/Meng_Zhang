@@ -9,6 +9,6 @@ If you want to create the dislocation accrding to your requirement, please note 
 3) specify the position the disloction core on line 259, but please be careful about the EDF decomposition on line 262.
 The code give us the structure dislocation line parallel with the y axis <1,-1,1> direciton
 
-## License
+## License:
 Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp) and Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp). 
 The __screw-dislocation-bcc-fe__ source code is distributed under a Mozilla Public License, V. 2.0.
