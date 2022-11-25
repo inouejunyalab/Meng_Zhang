@@ -36,7 +36,7 @@
    cmake ../cmake -C ../cmake/presets/basic.cmake -D PKG_GPU=on -D GPU_API=opencl -D GPU_PREC=mixed -D GPU_ARCH=sm_61 \
    make \
    sudo make install \
-   Note: the definition of shared memory in cuda must be changed into local (__shared__ ----> __local) in the "lal_annp.cu" file  
+   Note: the definition of shared memory in cuda must be changed into local ("__shared__ ----> __local") in the "lal_annp.cu" file  
 
 
 ## MD simulation in Lammps:
