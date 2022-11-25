@@ -27,7 +27,7 @@
 
 5) make mpi
 
-6) If you want to use OpenCL library, it's better using the cmake to compile lammps by following procedures:
+6) If you want to use OpenCL library, it's better using the cmake to compile lammps by following procedures: \
    mkdir build_opencl \
    cmake ../cmake -C ../cmake/presets/basic.cmake -D PKG_GPU=on -D GPU_API=opencl -D GPU_PREC=mixed -D GPU_ARCH=sm_61 \
    make \
