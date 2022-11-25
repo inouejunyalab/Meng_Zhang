@@ -25,8 +25,8 @@
    cp ./pair_annp.h         lammps_PATH/src/MANYBODY \
    cp ./pair_annp.cpp       lammps_PATH/src/MANYBODY 
 4) copy "pair_annp_gpu.h and pair_annp_gpu.cpp" in the "src" directory into lammps/src/GPU directory \
-   cp ./pair_annp_gpu.h     Lammps_PATH/src/GPU \
-   cp ./pair_annp_gpu.cpp   Lammps_PATH/src/GPU \
+   cp ./pair_annp_gpu.h     lammps_PATH/src/GPU \
+   cp ./pair_annp_gpu.cpp   lammps_PATH/src/GPU \
    add the name of the two "pair_annp_gpu*" files into Install.h file in GPU directory
 
 5) make mpi
