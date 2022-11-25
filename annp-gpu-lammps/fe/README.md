@@ -38,7 +38,7 @@
 ## MD simulation in Lammps:
 1) the Newton third law must be opened:  
    newton on
-2) pair_style	annp
+2) pair_style	annp  
    pair_style	* * fe_annp_potential.ann Fe
 
 
