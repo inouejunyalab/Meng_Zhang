@@ -68,7 +68,7 @@ int BaseAnnpT::init_annp(const int nlocal, const int nall, const int max_nbors,
 		_gpu_host = 1;
 
 	_threads_per_atom = device->threads_per_atom();														
-	//_threads_per_atom = 2;
+	_threads_per_atom = 8;
 
 	int success = device->init(*ans, false, false, nlocal, nall, maxspecial);
 	if (success != 0)
