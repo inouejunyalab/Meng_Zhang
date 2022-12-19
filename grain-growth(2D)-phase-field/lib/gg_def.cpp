@@ -1,6 +1,4 @@
 //* Host c++ *------------------------------------------
-//      Artifical Neural Network Potential
-//             Accelerated by GPU
 //______________________________________________________        
 //  begin:  Fri. Oct. 07, 2022
 //  email:  meng_zhang@metall.t.u-tokyo.ac.jp
