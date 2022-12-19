@@ -2,7 +2,7 @@
 
 ## Updating:
 1) removed redundant computation of symmetry functions 
-2) modified the updating force for atom i
+2) modified the force updating for atom i
 
 ## Tested systems, GPU cards, Lammps version:
 1) Ubuntu 16.04 (System)
