@@ -1,6 +1,6 @@
 ## This is new GPU implementation for ANNP of Fe, which has a 11% speedup increasing than the previous one. You can compile into LAMMPS [1] according to the procedures in "fe" file.
 
-## updating
+## Updating:
 1) removed redundant computation of symmetry functions 
 2) modified the updating force for atom i
 
