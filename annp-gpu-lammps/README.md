@@ -7,7 +7,7 @@ Please contact us if you have any questions or suggestion for the implementation
 meng_zhang@metall.t.u-tokyo.ac.jp (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue) 
 
 ## Performance test:
-THe performance test is for "fe" and "ni" package, which is carried out based on Nvidia Quadro P5000 card.
+THe performance test is for "fe" and "ni" package, which is carried out on Nvidia Quadro P5000 card.
 
 ## Reference:
 1) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
