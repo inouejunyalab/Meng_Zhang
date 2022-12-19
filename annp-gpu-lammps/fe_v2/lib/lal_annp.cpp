@@ -526,7 +526,7 @@ namespace LAMMPS_AL {
 		const int BX = this->block_size();		
 		int GX = static_cast<int>(ceil(static_cast<double>(this->ans->inum()) /
 										(BX / this->_threads_per_atom)));
-		int n_Block = 1000, nloop_GX = 0;
+		int n_Block = 2500, nloop_GX = 0;
 		if (n_Block >= GX) {
 			n_Block = GX;
 			nloop_GX = 1;
