@@ -1,4 +1,4 @@
-## This is new GPU implementation for ANNP of Fe (references 1 and 2), which has a 12-14% speedup increasing than the previous one, as can be seen from performance test. You can compile this into LAMMPS (reference 3) according to the procedures in "fe" file.
+## This is new GPU implementation for ANNP of Fe (References 1, 2, and 3), which has a 12-14% speedup increasing than the previous one, as can be seen from performance test. You can compile this into LAMMPS (Reference 4) according to the procedures in "fe" file.
 
 ## Update:
 1) removed redundant computation of symmetry functions 
@@ -12,7 +12,8 @@
 ## References:
 1) H. Mori, T. Ozaki, Phys Rev Mater. 4, 040601(R) (2020).
 2) N. Artrith and A. Urban, Comput. Mater. Sci. 114, 135 (2016).
-3) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
+3) M. Zhang, K, Hibi, J. Inoue, Comput. Phys. Commun. 108655, 285 (2023).
+4) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
 ## Update and release:
 [GitHub] (https://github.com/inouejunyalab/Meng_Zhang/tree/main/annp-gpu-lammps/fe_v2)
