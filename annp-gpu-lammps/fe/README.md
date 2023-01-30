@@ -1,9 +1,9 @@
 ## ANNP-GPU-Lammps (GPU-accelerated artificial neural network potential for molecular dynamics simulation)
 
 ## Description: 
--This package is used to implement of artificial neural network potential (ANNP), which can be accelerated by using GPU card. \
--You can compile these into LAMMPS package (Reference 1) according to the following procedures. It can support the CUDA- and OpenCL-enabled GPU card. \
--All the potential parameters (Fe) are obtained from Dr. H. Mori and co-workers (References 2 and 3), but the format is defined by us, as can be see the "fe_annp_potential_2.ann" file. 
+-This package is used to implement of artificial neural network potential (ANNP), which can be accelerated by using GPU card (Reference 1). \
+-You can compile these into LAMMPS package (Reference 2) according to the following procedures. It can support the CUDA- and OpenCL-enabled GPU card. \
+-All the potential parameters (Fe) are obtained from Dr. H. Mori and co-workers (References 3 and 4), but the format is defined by us, as can be see the "fe_annp_potential_2.ann" file. 
 
 -The files in the lib folder are the library, which should be complied into lammps/lib/GPU package. \
 -The files in the src folder are the source files, which provide the interface to lammps. \
@@ -53,9 +53,10 @@
 
 
 ## References:
-1) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
-2) H. Mori, T. Ozaki, Phys Rev Mater. 4, 040601(R) (2020).
-3) N. Artrith and A. Urban, Comput. Mater. Sci. 114, 135 (2016). 
+1) M. Zhang, K, Hibi, J. Inoue, Comput. Phys. Commun. 108655, 285 (2023).
+2) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
+3) H. Mori, T. Ozaki, Phys Rev Mater. 4, 040601(R) (2020).
+4) N. Artrith and A. Urban, Comput. Mater. Sci. 114, 135 (2016). 
 
 
 ## Update and release:
