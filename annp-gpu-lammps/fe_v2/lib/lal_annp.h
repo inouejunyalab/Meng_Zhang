@@ -79,9 +79,9 @@ namespace LAMMPS_AL {
 		numtyp4 _out_mod;
 		UCL_D_Vec<numtyp> _weight_all;
 		UCL_D_Vec<numtyp> _bias_all;
-		UCL_D_Vec<int> _flagact;																	// for saving active function
-		UCL_D_Vec<numtyp> _sfnor_scal;																// for normalizing the symmetry function
-		UCL_D_Vec<numtyp> _sfnor_avg;																// for normalizing the symmetry function
+		UCL_D_Vec<int> _flagact;																	
+		UCL_D_Vec<numtyp> _sfnor_scal;																
+		UCL_D_Vec<numtyp> _sfnor_avg;																
 		int _max_size_w, _max_size_b;
 
 		UCL_D_Vec<int> _acc_view;
@@ -97,8 +97,8 @@ namespace LAMMPS_AL {
 		UCL_Vector<acctyp4, acctyp4> _virial4;
 		UCL_Vector<acctyp2, acctyp2> _virial2;
 
-		UCL_D_Vec<numtyp> _cutsq;																	// 1D for cuda, 
-		UCL_D_Vec<int> _map;																		// method can be used from tersoff_gpu
+		UCL_D_Vec<numtyp> _cutsq;																	
+		UCL_D_Vec<int> _map;																		
 
 		int _max_newj;
 		UCL_D_Vec<acctyp4> _dGij;
@@ -107,8 +107,8 @@ namespace LAMMPS_AL {
 																																																
 	protected:
 		bool _allocated;
-		int loop(const int eflag, const int vflag);													// is used for the "compute ()" in "lal_base_annp.cpp" file
-		int loop_annp(const int eflag, const int vflag, const int nghost, const int nall);			// is used for the "compute ()" in "lal_annp.cpp" file to calculate the force and energy
+		int loop(const int eflag, const int vflag);													
+		int loop_annp(const int eflag, const int vflag, const int nghost, const int nall);			
 	};
 }
 #endif
