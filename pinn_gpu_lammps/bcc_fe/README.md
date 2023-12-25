@@ -13,9 +13,9 @@
 2) copy all files in the "lib" directory into lammps/lib/gpu directory \
    cp ./lal_*   lammps_PATH/lib/gpu
 
-  Note: \
-  (a) set correct value of GPU_ARCH in "Makefile.linux" \
-  (b) make -f Makefile.linux \
+   Note: \
+   (a) set correct value of GPU_ARCH in "Makefile.linux" \
+   (b) make -f Makefile.linux
   
 3) copy "pair_pinn.h and pair_pinn.cpp" in the "src" directory into lammps/src/MANYBODY directory \
    cp ./pair_pinn.h     lammps_PATH/src/MANYBODY \
