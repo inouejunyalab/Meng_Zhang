@@ -1,7 +1,7 @@
 ## PINN-GPU-Lammps (High-accurate and -efficient potential for BCC iron based on the physically informed artificial neural networks)
 
 ## Description:
-This package contains a new physically informed neural network (PINN) potentials for BCC iron, which has been implementated in LAMMPS (Reference 1) CPU and GPU package. 
+This package contains a new physically informed neural network (PINN) potentials for BCC iron, which has been implementated in CPU and GPU packages of LAMMPS (Reference 1). 
 
 Please conta us if you have any questions or suggestions for this implementation: meng_zhang@metall.t.u-tokyo.ac.jp (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue)
 
