@@ -10,8 +10,7 @@
 
 ## Installation:
 1) download all files in "lib", "src" directors and the potential file
-2) 
-3) copy all files in the "lib" directory into lammps/lib/gpu directory
+2) copy all files in the "lib" directory into lammps/lib/gpu directory
    cp ./lal_*   lammps_PATH/lib/gpu
 
   Note:
@@ -19,8 +18,8 @@
   (b) make -f Makefile.linux
   
 3) copy "pair_pinn.h and pair_pinn.cpp" in the "src" directory into lammps/src/MANYBODY directory
-  cp ./pair_pinn.h     lammps_PATH/src/MANYBODY
-  cp ./pair_pinn.cpp   lammps_PATH/src/MANYBODY
+   cp ./pair_pinn.h     lammps_PATH/src/MANYBODY
+   cp ./pair_pinn.cpp   lammps_PATH/src/MANYBODY
   
 4) copy "pair_pinn_gpu.h and pair_pinn_gpu.cpp" in the "src" directory into lammps/src/GPU directory
    cp ./pair_pinn_gpu.h     lammps_PATH/src/GPU
