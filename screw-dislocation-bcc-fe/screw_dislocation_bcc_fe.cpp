@@ -23,8 +23,7 @@
 const double pi = 3.14159265358979;
 const double fe_lattice = 2.8553;
 
-class Box
-{
+class Box {
 public:
 	static double orient[3][3];
 	static void get_length_unitorient(double length_box[3], double unit_orient[3][3]);
