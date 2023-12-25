@@ -13,7 +13,7 @@
 2) copy all files in the "lib" directory into lammps/lib/gpu directory
    cp ./lal_*   lammps_PATH/lib/gpu
 
-  Note:
+  Note: \
   (a) set correct value of GPU_ARCH in "Makefile.linux"
   (b) make -f Makefile.linux
   
