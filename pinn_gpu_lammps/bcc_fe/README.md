@@ -27,12 +27,12 @@
    add the name of the two "pair_pinn_gpu*" files into Install.h file in GPU directory
 5）make mpi
 
-6）If you want to use OpenCL library, it's better using the cmake to compile lammps by following procedures: \
+6) If you want to use OpenCL library, it's better using the cmake to compile lammps by following procedures: \
    mkdir build_opencl \
    cd build_opencl \
    cmake ../cmake -C ../cmake/presets/basic.cmake -D PKG_GPU=on -D GPU_API=opencl -D GPU_PREC=mixed -D GPU_ARCH=sm_86 \
    make \
-   sudo make install
+   sudo make install \
 
 ## MD simulation in Lammps:
 1) the Newton third law must be off: \
