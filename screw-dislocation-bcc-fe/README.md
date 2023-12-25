@@ -11,4 +11,4 @@ The method used in the codes is the elastic deisplacement field (EDF): 𝑈_𝑧
 
 ## License:
 Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp) and Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp). 
-The __screw-dislocation-bcc-fe__ source code is distributed under a Mozilla Public License, V. 2.0.
+The __screw_dislocation_bcc_fe__ source code is distributed under a Mozilla Public License, V. 2.0.
