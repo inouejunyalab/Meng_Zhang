@@ -8,4 +8,4 @@
 After creating the model, you need to delete the overlap atoms on two GBs.
 
 ## License:
-Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp), Koki Hibi (koki_hibi@metall.t.u-tokyo.ac.jp), Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp). The pinn-gpu-lammps source code is distributed under a Mozilla Public License, V. 2.0.
+Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp), Koki Hibi (koki_hibi@metall.t.u-tokyo.ac.jp), Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp). The __symmetry_tilt_grain_boundary__ source code is distributed under a Mozilla Public License, V. 2.0.
