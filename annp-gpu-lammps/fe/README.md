@@ -1,7 +1,7 @@
 ## ANNP-GPU-Lammps (GPU-accelerated artificial neural network potential for molecular dynamics simulation)
 
 ## Description: 
--This package is used to implement an artificial neural network potential (ANNP) into LAMMPS package (Reference 1), which can be accelerated by using GPU card (Reference 2). \
+-This package is used to implement an artificial neural network potential (ANNP) in LAMMPS package (Reference 1), which can be accelerated by using GPU card (Reference 2). \
 -You can compile these into LAMMPS package according to the following procedures. It can support the CUDA- and OpenCL-enabled GPU card. \
 -All the potential parameters (Fe) are obtained from Dr. H. Mori and co-workers (References 3 and 4), but the format is defined by us, as can be see the "fe_annp_potential_2.ann" file. 
 
