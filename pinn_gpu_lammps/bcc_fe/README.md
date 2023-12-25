@@ -26,7 +26,7 @@
    cp ./pair_pinn_gpu.cpp   lammps_PATH/src/GPU \
    add the name of the two "pair_pinn_gpu*" files into Install.h file in GPU directory
 
-5）make mpi
+5) make mpi
 
 6) If you want to use OpenCL library, it's better using the cmake to compile lammps by following procedures: \
    mkdir build_opencl \
