@@ -2,7 +2,7 @@
 
 ## How to using:
 1) specify the vector along z-axis on line 21 in "stgb.cpp" file.
-2) changing the length of box for one grain on line 22 in "stgb.cpp" file according to you needs. If you want to create a large model, the number on line 133 in "stgb_b.cpp" need to be changed to make the atoms be full of the box.
+2) changing the length of box for one grain on line 22 in "stgb.cpp" file according to you needs. If you want to create a large model, the number on line 133 in "stgb_b.cpp" needs to be changed to make the atoms be full of the box.
 
 ## Note:
 After creating the model, you need to delete the overlap atoms on two GBs.
