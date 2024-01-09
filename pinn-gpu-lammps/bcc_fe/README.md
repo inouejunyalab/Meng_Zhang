@@ -37,8 +37,7 @@
 
 ## MD simulation in Lammps:
 1) the Newton third law must be on and off for CPU-runs and GPU-runs, respectively: \
-   newton on \                       # For CPU-runs
-   newton off                        # For GPU-runs
+   newton on(or off)
 3) pair_style pinn_adp \
    pair_style * * fe_adp_potential_2310.pinn Fe
    
