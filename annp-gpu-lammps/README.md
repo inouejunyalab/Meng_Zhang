@@ -4,7 +4,7 @@
 This package contains some GPU-implementations of artificial neural network potentials (ANNPs). The flexible computation approach (FCA) is used to increase performance (Reference 1). You can compile each potential into LAMMPS software (Reference 2). Please see the detailed procedures inside of each potential. 
 
 Please contact us if you have any questions or suggestion for the implementation:
-meng_zhang@metall.t.u-tokyo.ac.jp (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue) 
+meng_zhang@metall.t.u-tokyo.ac.jp/mengzh90@gmail.com (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue) 
 
 ## Performance test:
 The results of performance test are for "fe" and "ni" packages, which are carried out on Nvidia Quadro P5000 card.
