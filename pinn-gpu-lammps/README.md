@@ -3,7 +3,7 @@
 ## Description:
 This package contains a new physically informed neural network (PINN) potential for BCC iron, which has been implementated in CPU and GPU packages of LAMMPS (Reference 1). 
 
-Please conta us if you have any questions or suggestions for this implementation: meng_zhang@metall.t.u-tokyo.ac.jp (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue)
+Please conta us if you have any questions or suggestions for this implementation: meng_zhang@metall.t.u-tokyo.ac.jp/mengzh90@gmail.com (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue)
 
 ## References:
 1) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
