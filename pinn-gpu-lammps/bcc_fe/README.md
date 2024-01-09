@@ -36,9 +36,10 @@
    sudo make install \
 
 ## MD simulation in Lammps:
-1) the Newton third law must be off: \
-   newton off
-2) pair_style pinn_adp \
+1) the Newton third law must be on and off for CPU-runs and GPU-runs, respectively: \
+   newton on \                       # For CPU-runs
+   newton off                        # For GPU-runs
+3) pair_style pinn_adp \
    pair_style * * fe_adp_potential_2310.pinn Fe
    
 ## Tested systems, GPU cards, Lammps version:
