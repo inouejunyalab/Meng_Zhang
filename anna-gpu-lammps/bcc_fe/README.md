@@ -1,7 +1,7 @@
 ## Impelementation of ANNA potential for bcc_fe
 
 ## Description:
--This package is used to implement a PINN potential for BCC fe in LAMMPS package (Reference 1), which can be accelerated by using GPU card.\
+-This package is used to implement a ANNA potential for BCC fe in LAMMPS package (Reference 1), which can be accelerated by using GPU card.\
 -You can compile this package according to the following procedures. It can support the CUDA- and OpenCL-enabled GPU card. 
 
 -The files in the lib folder are the library, which should be complied into lammps/lib/GPU package. \
