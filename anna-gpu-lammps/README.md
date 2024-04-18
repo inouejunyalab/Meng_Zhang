@@ -1,20 +1,15 @@
-## ANNA-GPU-Lammps (High accurate and efficient potential for BCC iron assistant by artificial neural networks)
+## ANNA-GPU-Lammps (High-accurate and -efficient potential for BCC iron based on the physically informed artificial neural networks)
 
 ## Description:
-This package contains some GPU-implementations of artificial neural network assistant potentials (ANNA) for BCC iron. 
+This package contains a new artificial neural networks assistant (ANNA) potential for BCC iron, which has been implementated in CPU and GPU packages of LAMMPS (Reference 1). 
 
-Please contact us if you have any questions or suggestion for the implementation:
-meng_zhang@metall.t.u-tokyo.ac.jp/mengzh90@gmail.com (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue) 
+Please conta us if you have any questions or suggestions for this implementation: meng_zhang@metall.t.u-tokyo.ac.jp/mengzh90@gmail.com (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue)
 
-## Performance test:
-The results of performance test are carried out on Nvidia RTX A5000 GPU card.
-
-## Reference:
+## References:
 1) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
-## LAMMPS Version:
+## LAMMPS version:
 1) September 2021 stable
 
 ## License:
-Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp), Koki Hibi (koki_hibi@metall.t.u-tokyo.ac.jp), Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp).
-The __anna-gpu-lammps__ source code is distributed under a Mozilla Public License, V. 2.0.
+Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp), Koki Hibi (koki_hibi@metall.t.u-tokyo.ac.jp), Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp). The __anna-gpu-lammps__ source code is distributed under a Mozilla Public License, V. 2.0.
