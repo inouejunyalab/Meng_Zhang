@@ -50,7 +50,7 @@
 1) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
 ## Update and release:
-[GitHub] (https://github.com/inouejunyalab/Meng_Zhang/edit/main/pinn-gpu-lammps/bcc_fe)
+[GitHub] (https://github.com/inouejunyalab/Meng_Zhang/tree/main/anna-gpu-lammps/bcc_fe)
 
 ## Contact Information:
 Email: meng_zhang@metall.t.u-tokyo.ac.jp (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue) Please contact us if you have any questions or suggestion for the implementation
