@@ -8,7 +8,7 @@
 //______________________________________________________
 //------------------------------------------------------
 
-#include "lal_base_pinn_adp.h"
+#include "lal_base_anna_adp.h"
 #include "iostream"
 
 namespace LAMMPS_AL {
@@ -44,7 +44,7 @@ BasePinnadpT::~BasePinnadp() {
 }
 
 template <class numtyp, class acctyp>
-int BasePinnadpT::bytes_per_atom_pinn_adp(const int max_nbors) const {
+int BasePinnadpT::bytes_per_atom_anna_adp(const int max_nbors) const {
 	
 	return device->atom.bytes_per_atom() + ans->bytes_per_atom() + 
 		   nbor->bytes_per_atom(max_nbors);
@@ -52,11 +52,11 @@ int BasePinnadpT::bytes_per_atom_pinn_adp(const int max_nbors) const {
 
 // most of lines are copied from "lal_base_atomic.cpp" file
 template <class numtyp, class acctyp>
-int BasePinnadpT::init_pinn_adp(const int nlocal, const int nall, const int max_nbors, 
+int BasePinnadpT::init_anna_adp(const int nlocal, const int nall, const int max_nbors, 
 								const int maxspecial, const double cell_size, 
 								const double gpu_split, FILE* _screen, 
 								const void* pair_program, const char* k_energy, 
-								const char* k_pinn_adp, const char* k_short_nbor, int onetype) {
+								const char* k_anna_adp, const char* k_short_nbor, int onetype) {
 	screen = _screen;
 
 	int gpu_nbor = 0;
@@ -83,7 +83,7 @@ int BasePinnadpT::init_pinn_adp(const int nlocal, const int nall, const int max_
 
 	_block_size = device->pair_block_size();
 	compile_kernels(*ucl_device, pair_program, k_energy, 
-					k_pinn_adp, k_short_nbor, onetype);							
+					k_anna_adp, k_short_nbor, onetype);							
 
 	if (_threads_per_atom > 1 && gpu_nbor == 0) {								
 		nbor->packing(true);
@@ -115,7 +115,7 @@ void BasePinnadpT::estimate_gpu_overhead(const int add_kernels) {
 }
 
 template <class numtyp, class acctyp>
-void BasePinnadpT::clear_pinn_adp() {
+void BasePinnadpT::clear_anna_adp() {
 	// Output any timing information
 	acc_timers();
 	double avg_split = hd_balancer.all_avg_split();
@@ -306,7 +306,7 @@ int** BasePinnadpT::compute(const int ago, const int inum_full, const int nall,
 }
 
 template <class numtyp, class acctyp>
-double BasePinnadpT::host_memory_usage_pinn_adp() const {
+double BasePinnadpT::host_memory_usage_anna_adp() const {
 	return device->atom.host_memory_usage() + nbor->host_memory_usage() +
 		   4 * sizeof(numtyp) + sizeof(BasePinnadp<numtyp, acctyp>);
 }
@@ -322,7 +322,7 @@ void BasePinnadpT::compile_kernels(UCL_Device& dev, const void* pair_str,
 		return;
 	_onetype = onetype;
 
-	std::string s_pinn = std::string(kname);
+	std::string s_anna = std::string(kname);
 	if (pair_program) delete pair_program;
 	pair_program = new UCL_Program(dev);
 	std::string oclstring = device->compile_string() + " -DEVFLAG=1";
@@ -339,7 +339,7 @@ void BasePinnadpT::compile_kernels(UCL_Device& dev, const void* pair_str,
 	if (pair_program_noev) delete pair_program_noev;
 	pair_program_noev = new UCL_Program(dev);
 	pair_program_noev->load_string(pair_str, oclstring.c_str(), nullptr, screen);
-	k_pair_noev.set_function(*pair_program_noev, s_pinn.c_str());
+	k_pair_noev.set_function(*pair_program_noev, s_anna.c_str());
 #else
 	k_pair_sel = &k_pair;
 #endif
