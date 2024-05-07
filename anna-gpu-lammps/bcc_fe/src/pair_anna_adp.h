@@ -10,21 +10,21 @@
 
 #ifdef PAIR_CLASS
 // clang-format off
-PairStyle(pinn_adp, PairPINN_ADP);
+PairStyle(anna_adp, PairANNA_ADP);
 // clang-format on
 #else
 
-#ifndef LMP_PAIR_PINN_ADP_H
-#define LMP_PAIR_PINN_ADP_H
+#ifndef LMP_PAIR_ANNA_ADP_H
+#define LMP_PAIR_ANNA_ADP_H
 
 #include "pair.h"
 
 namespace LAMMPS_NS {
 
-   class PairPINN_ADP : public Pair {
+   class PairANNA_ADP : public Pair {
    public:
-      PairPINN_ADP(class LAMMPS *);
-      virtual ~PairPINN_ADP();
+      PairANNA_ADP(class LAMMPS *);
+      virtual ~PairANNA_ADP();
       virtual void compute(int, int);                                          
       void settings(int, char**);
       void coeff(int, char**);
@@ -48,12 +48,12 @@ namespace LAMMPS_NS {
               elements = "";
           }
       };
-      struct PINN {
+      struct ANNA {
           double*** weight_all, *** bias_all;                         
       };
-      struct PINNPARA {
+      struct ANNAPARA {
           Element* all_elem;
-          PINN* all_pinn;
+          ANNA* all_anna;
           int nelements;                                                   
           double cut;
           double e_base, e_scal;                                           
@@ -61,7 +61,7 @@ namespace LAMMPS_NS {
           int flagsym, * flagact;                                            
           int ntl, nhl, nnod, nout, nsf, npsf, ntsf, ngp;                    
       };
-      PINNPARA* params;
+      ANNAPARA* params;
      
 /*---------------------------------------------------------------------
                                 sub_functions
@@ -70,14 +70,14 @@ namespace LAMMPS_NS {
       virtual void allocate();
 
       // used for compute () function
-      virtual void pinn_adp_symmetry_pair(double, double, double*, PINNPARA*);
-      virtual void pinn_adp_symmetry_trip(double, double, double, double*, PINNPARA*);
-      virtual void pinn_adp_feed_forward(int, double *, double*, PINNPARA*);
+      virtual void anna_adp_symmetry_pair(double, double, double*, ANNAPARA*);
+      virtual void anna_adp_symmetry_trip(double, double, double, double*, ANNAPARA*);
+      virtual void anna_adp_feed_forward(int, double *, double*, ANNAPARA*);
 
       // used for above function
-      virtual void pinn_adp_Tx(double, int, double*);
+      virtual void anna_adp_Tx(double, int, double*);
       virtual void dot_add_wxb(int, int, double**, double*, double**, double*);
-      virtual void pinn_adp_actf(int, int, int, int, double*, double*);
+      virtual void anna_adp_actf(int, int, int, int, double*, double*);
 
 /*---------------------------------------------------------------------
         create/delete the 2-D and 3-D matrix nad initialization 0
