@@ -8,8 +8,8 @@
 //______________________________________________________
 //------------------------------------------------------
 
-#ifndef LAL_BASE_PINN_ADP_H
-#define LAL_BASE_PINN_ADP_H
+#ifndef LAL_BASE_ANNA_ADP_H
+#define LAL_BASE_ANNA_ADP_H
 
 #include "lal_device.h"
 #include "lal_balance.h"
@@ -44,10 +44,10 @@ public:
 	  * - -3 if there is an out of memory error
 	  * - -4 if the GPU library was not compiled for GPU
 	  * - -5 Double precision is not supported on card **/
-	int init_pinn_adp(const int nlocal, const int nall, const int max_nbors,
+	int init_anna_adp(const int nlocal, const int nall, const int max_nbors,
 					  const int maxspecial, const double cell_size,
 					  const double gpu_split, FILE* _screen, const void* pair_program,
-					  const char* k_energy, const char* k_pinn_adp=nullptr, 
+					  const char* k_energy, const char* k_anna_adp=nullptr, 
 					  const char* k_short_nbor=nullptr, const int onetype = 0);
 
 	// Estimate the overhead for GPU context changes and CPU driver								
@@ -84,13 +84,13 @@ public:
 
 	// Clear all host and device data
 	/** \note This is called at the beginning of the init() routine **/
-	void clear_pinn_adp();																		
+	void clear_anna_adp();																		
 
 	// Returns memory usage on device per atom
-	int bytes_per_atom_pinn_adp(const int max_nbors) const;										
+	int bytes_per_atom_anna_adp(const int max_nbors) const;										
 
 	// Total host memory used by library for pair style
-	double host_memory_usage_pinn_adp() const;													
+	double host_memory_usage_anna_adp() const;													
 
 	// Accumulate timers
 	inline void acc_timers() {
@@ -178,7 +178,7 @@ public:
 			k_pair_sel = &k_pair_noev;													
 #endif
 	}
-	inline void set_kernel_pinn_adp(const int eflag, const int vflag) {								
+	inline void set_kernel_anna_adp(const int eflag, const int vflag) {								
 #if defined (LAL_OCL_EV_JIT)																		
 		if (eflag || vflag)	
 			k_pair_sel = &k_pair;																	
