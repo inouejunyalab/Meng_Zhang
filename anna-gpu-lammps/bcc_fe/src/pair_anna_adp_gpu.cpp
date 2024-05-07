@@ -8,7 +8,7 @@
 //______________________________________________________
 //------------------------------------------------------
 
-#include "pair_pinn_adp_gpu.h"
+#include "pair_anna_adp_gpu.h"
 
 #include "atom.h"
 #include "comm.h"
@@ -28,7 +28,7 @@
 using namespace LAMMPS_NS;
 
 // External functions from cuda library for atom decomposition
-int pinn_adp_gpu_init(const int ntypes, const int inum, const int nall, 
+int anna_adp_gpu_init(const int ntypes, const int inum, const int nall, 
                       const int max_nbors, const double cell_size, 
                       int& gpu_mode, FILE* screen, const int maxspecial,
                       const int ntl, const int nhl, const int nnod, 
@@ -38,10 +38,10 @@ int pinn_adp_gpu_init(const int ntypes, const int inum, const int nall,
                       double** host_cutsq, int* host_map, double*** host_weight_all,
                       double*** host_bias_all, double *gadp_params, int &adp_size);       
 
-void pinn_adp_gpu_clear();
+void anna_adp_gpu_clear();
 
 // build nighbord list on gpu, then calcualte energy
-int** pinn_adp_gpu_compute_n(const int ago, const int inum_full, const int nall, 
+int** anna_adp_gpu_compute_n(const int ago, const int inum_full, const int nall, 
                              const int nlocal, double** host_x, int* host_type, 
                              double* sublo,double* subhi, tagint* tag, int** nspecial, 
                              tagint** special, const bool eflag, const bool vflag, 
@@ -51,7 +51,7 @@ int** pinn_adp_gpu_compute_n(const int ago, const int inum_full, const int nall,
                              int** jnum, bool& success, const double cpu_time);
 
 // copy neighbor list from cpu, then calcualte energy
-void pinn_adp_gpu_compute(const int ago, const int inum_full, const int nall, 
+void anna_adp_gpu_compute(const int ago, const int inum_full, const int nall, 
                           const int nlocal, double** host_x, int* host_type, 
                           int* ilist, int* numj, int** firstneigh, 
                           const bool eflag, const bool vflag, 
@@ -60,13 +60,13 @@ void pinn_adp_gpu_compute(const int ago, const int inum_full, const int nall,
                           int& host_start, bool& success, const double cpu_time);
 
 // calculating the force
-void pinn_adp_gpu_compute_force(const int nall, int* ilist, const bool eflag, 
+void anna_adp_gpu_compute_force(const int nall, int* ilist, const bool eflag, 
                                 const bool vflag, const bool ea_flag, const bool va_flag);
 
-double pinn_adp_gpu_bytes();
+double anna_adp_gpu_bytes();
 
 /*----------------------------------------------------------------------*/
-PairPINNADPGPU::PairPINNADPGPU(LAMMPS *lmp) : PairPINN_ADP(lmp), gpu_mode(GPU_FORCE) {
+PairANNAADPGPU::PairANNAADPGPU(LAMMPS *lmp) : PairANNA_ADP(lmp), gpu_mode(GPU_FORCE) {
     respa_enable = 0;                                                                   
     cpu_time = 0.0;                                              
     suffix_flag |= Suffix::GPU;
@@ -76,20 +76,20 @@ PairPINNADPGPU::PairPINNADPGPU(LAMMPS *lmp) : PairPINN_ADP(lmp), gpu_mode(GPU_FO
 /*---------------------------------------------------------------------
     check if allocated, since class can be destructed when incomplete
 ----------------------------------------------------------------------*/
-PairPINNADPGPU::~PairPINNADPGPU() {
-    pinn_adp_gpu_clear();
+PairANNAADPGPU::~PairANNAADPGPU() {
+    anna_adp_gpu_clear();
 }    
 
 /*--------------------------------------------------------------------*/
-double PairPINNADPGPU::memory_usage() {
+double PairANNAADPGPU::memory_usage() {
     double bytes = Pair::memory_usage();
-    return bytes + pinn_adp_gpu_bytes();
+    return bytes + anna_adp_gpu_bytes();
 }
 
 /*---------------------------------------------------------------------
                     compute force and energy
 ----------------------------------------------------------------------*/
-void PairPINNADPGPU::compute(int eflag, int vflag) {
+void PairANNAADPGPU::compute(int eflag, int vflag) {
     ev_init(eflag, vflag);
     int nghost = atom->nghost;
     int nlocal = atom->nlocal;
@@ -110,7 +110,7 @@ void PairPINNADPGPU::compute(int eflag, int vflag) {
             domain->bbox(domain->sublo_lamda,domain->subhi_lamda,sublo,subhi);
         }
         inum = atom->nlocal;
-        firstneigh = pinn_adp_gpu_compute_n(neighbor->ago, inum, nall, nlocal, 
+        firstneigh = anna_adp_gpu_compute_n(neighbor->ago, inum, nall, nlocal, 
                                             atom->x, atom->type, sublo, subhi, 
                                             atom->tag, atom->nspecial, 
                                             atom->special, eflag, vflag, eflag_atom, 
@@ -122,7 +122,7 @@ void PairPINNADPGPU::compute(int eflag, int vflag) {
         ilist = list->ilist;
         numneigh = list->numneigh;
         firstneigh = list->firstneigh;
-        pinn_adp_gpu_compute(neighbor->ago, inum, nall, nlocal, 
+        anna_adp_gpu_compute(neighbor->ago, inum, nall, nlocal, 
                              atom->x, atom->type, ilist, numneigh, 
                              firstneigh, eflag, vflag, eflag_atom, 
                              vflag_atom, &adp_rho, adp_mu, 
@@ -149,19 +149,19 @@ void PairPINNADPGPU::compute(int eflag, int vflag) {
     }
     // compute force of each atom on GPU
     if (gpu_mode != GPU_FORCE)
-        pinn_adp_gpu_compute_force(nall, nullptr, eflag, vflag, eflag_atom, vflag_atom);
+        anna_adp_gpu_compute_force(nall, nullptr, eflag, vflag, eflag_atom, vflag_atom);
     else
-        pinn_adp_gpu_compute_force(nall, ilist, eflag, vflag, eflag_atom, vflag_atom);
+        anna_adp_gpu_compute_force(nall, ilist, eflag, vflag, eflag_atom, vflag_atom);
 }
 
 /*---------------------------------------------------------------------
                  init specific to this pair style
 ----------------------------------------------------------------------*/
-void PairPINNADPGPU::init_style() {
+void PairANNAADPGPU::init_style() {
     if (atom->tag_enable == 0)
-        error->all(FLERR, "Pair style pinn_adp/gpu requires atom IDs");
+        error->all(FLERR, "Pair style anna_adp/gpu requires atom IDs");
     if (force->newton_pair == 1)
-        error->all(FLERR, "Pair style pinn_adp/gpu requires newton pair off");
+        error->all(FLERR, "Pair style anna_adp/gpu requires newton pair off");
 
     // parameters that need to send to GPU
     int ntl, nhl, nnod, nout, nsf, npsf, ntsf, ngp, nelements;
@@ -222,10 +222,10 @@ void PairPINNADPGPU::init_style() {
             }
             for (int j = 0; j < nrow_w; j++)
                 for (int k = 0; k < ncol_w; k++)
-                    weight_all[rtype][i][k + j * ncol_w] = params[0].all_pinn[rtype].weight_all[i][j][k];
+                    weight_all[rtype][i][k + j * ncol_w] = params[0].all_anna[rtype].weight_all[i][j][k];
             for (int j = 0; j < nrow_b; j++)
                 for (int k = 0; k < ncol_b; k++)
-                    bias_all[rtype][i][k + j * ncol_b] = params[0].all_pinn[rtype].bias_all[i][j][k];
+                    bias_all[rtype][i][k + j * ncol_b] = params[0].all_anna[rtype].bias_all[i][j][k];
             flagact[i] = params[0].flagact[i];
         }
     }
@@ -242,7 +242,7 @@ void PairPINNADPGPU::init_style() {
     double cell_size = cutmax + neighbor->skin;
     int mnf = 5e-2 * neighbor->oneatom;
     int nall = atom->nlocal + atom->nghost;                                    
-    int success = pinn_adp_gpu_init(atom->ntypes, atom->nlocal, nall, mnf,     
+    int success = anna_adp_gpu_init(atom->ntypes, atom->nlocal, nall, mnf,     
                                     cell_size, gpu_mode, screen, maxspecial,
                                     ntl, nhl, nnod, nsf, npsf, ntsf, nout, ngp, 
                                     n_mu, n_lamb, e_base, flagsym, flagact, cutsq, 
@@ -271,7 +271,7 @@ void PairPINNADPGPU::init_style() {
 /*---------------------------------------------------------------------
         packing the value of _fp, _mu, _lambda for communication
 ----------------------------------------------------------------------*/
-int PairPINNADPGPU::pack_forward_comm(int n, int* list, double* buf_adp, int /*pbc_flag*/, int* /*pbc*/) {
+int PairANNAADPGPU::pack_forward_comm(int n, int* list, double* buf_adp, int /*pbc_flag*/, int* /*pbc*/) {
     
     int i, j, m = 0;
     if (adp_single) {
@@ -294,7 +294,7 @@ int PairPINNADPGPU::pack_forward_comm(int n, int* list, double* buf_adp, int /*p
 /*---------------------------------------------------------------------
                 unpacking the buf of _fp, _mu, _lambda
 ----------------------------------------------------------------------*/
-void PairPINNADPGPU::unpack_forward_comm(int n, int first, double* buf_adp) {
+void PairANNAADPGPU::unpack_forward_comm(int n, int first, double* buf_adp) {
 
     int i, last, m = 0;
     last = first + n;
