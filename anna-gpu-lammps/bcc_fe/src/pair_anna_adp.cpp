@@ -8,7 +8,7 @@
 //______________________________________________________
 //------------------------------------------------------
 
-#include "pair_pinn_adp.h"
+#include "pair_anna_adp.h"
 
 #include "atom.h"
 #include "comm.h"
@@ -39,7 +39,7 @@ using namespace MathSpecial;
 using namespace MathExtra;
 
 /*----------------------------------------------------------------------*/
-PairPINN_ADP::PairPINN_ADP(LAMMPS *lmp) : Pair(lmp) {
+PairANNA_ADP::PairANNA_ADP(LAMMPS *lmp) : Pair(lmp) {
     restartinfo = 0;                                                            
     one_coeff = 1;                                                              
     manybody_flag = 1;                                                          
@@ -52,7 +52,7 @@ PairPINN_ADP::PairPINN_ADP(LAMMPS *lmp) : Pair(lmp) {
 /*---------------------------------------------------------------------
    check if allocated, since class can be destructed when incomplete
 ----------------------------------------------------------------------*/
-PairPINN_ADP::~PairPINN_ADP() {
+PairANNA_ADP::~PairANNA_ADP() {
     if (copymode)    return;                                                    
     if (allocated) {
         memory->destroy(cutsq);
@@ -70,7 +70,7 @@ PairPINN_ADP::~PairPINN_ADP() {
 /*---------------------------------------------------------------------
                   compute force and energy
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::compute(int eflag, int vflag) {
+void PairANNA_ADP::compute(int eflag, int vflag) {
     int i, j, k, ii, jj, kk, inum, jnum;
     int itype, jtype, ktype, ritype, rjtype, rktype;
     double xtmp, ytmp, ztmp, evdwl;
@@ -141,7 +141,7 @@ void PairPINN_ADP::compute(int eflag, int vflag) {
             scale3(rijinv, xij, rij_unit);                                   
             rij = all_xij[jj][3];
             double fcij = 0.5 * (cos(coeff_b * rij) + 1.0);
-            pinn_adp_symmetry_pair(rij, fcij, G, &params[0]);
+            anna_adp_symmetry_pair(rij, fcij, G, &params[0]);
             for (kk = jj + 1; kk < jnum; kk++) {
                 k = jlist[kk];
                 rktype = type[k];
@@ -158,12 +158,12 @@ void PairPINN_ADP::compute(int eflag, int vflag) {
                 cos_theta = dot3(rij_unit, rik_unit);
                 rik = sqrt(rsqik);
                 double fcik = 0.5 * (cos(coeff_b * rik) + 1.0);
-                pinn_adp_symmetry_trip(cos_theta, fcij, fcik, G, &params[0]);
+                anna_adp_symmetry_trip(cos_theta, fcij, fcik, G, &params[0]);
             }
         }
 
         // getting the local parameters
-        pinn_adp_feed_forward(itype, lparams, G, &params[0]);               
+        anna_adp_feed_forward(itype, lparams, G, &params[0]);               
         double d2 = lparams[0], q2 = lparams[1];                            
 
         // energy and force
@@ -288,7 +288,7 @@ void PairPINN_ADP::compute(int eflag, int vflag) {
 /*---------------------------------------------------------------------
                         allocate all arrys
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::allocate() {
+void PairANNA_ADP::allocate() {
     allocated = 1;
     int n = atom->ntypes;
 
@@ -308,14 +308,14 @@ void PairPINN_ADP::allocate() {
 /*---------------------------------------------------------------------
     global setting
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::settings(int narg, char **arg) {
+void PairANNA_ADP::settings(int narg, char **arg) {
     if (narg != 0)    error->all(FLERR, "Illegal pair_style command");
 }
 
 /*---------------------------------------------------------------------
               set coeffs for one or more type pairs     
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::coeff(int narg, char** arg) {
+void PairANNA_ADP::coeff(int narg, char** arg) {
     if (!allocated)   allocate();
     int ntypes = atom->ntypes;
     int i, j;
@@ -340,7 +340,7 @@ void PairPINN_ADP::coeff(int narg, char** arg) {
 
     // read_file from the potential
     nparams = 0;                                                           
-    params = new PINNPARA[2];                                              
+    params = new ANNAPARA[2];                                              
     read_file(arg[2]);
     nparams++;                                                             
     std::cout << "number of potentials.......: " << comm->me << " " << nparams << std::endl;
@@ -367,7 +367,7 @@ void PairPINN_ADP::coeff(int narg, char** arg) {
 /*---------------------------------------------------------------------
                   init specfic to this pair style     
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::init_style() {
+void PairANNA_ADP::init_style() {
     if (force->newton_pair == 0)
         error->all(FLERR, "Pair style Neural Network Potential requires newton pair on");
     
@@ -380,7 +380,7 @@ void PairPINN_ADP::init_style() {
 /*---------------------------------------------------------------------
            init for one type pair i,j and corresponding j,i     
 ----------------------------------------------------------------------*/
-double PairPINN_ADP::init_one(int i, int j) {
+double PairANNA_ADP::init_one(int i, int j) {
     if (setflag[i][j] == 0) error->all(FLERR, "All pair coeffs are not set");
     return cutmax;
 }
@@ -388,8 +388,8 @@ double PairPINN_ADP::init_one(int i, int j) {
 /*---------------------------------------------------------------------
                          read potential file    
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::read_file(char *filename) {
-    PINNPARA*file = &params[0];                    
+void PairANNA_ADP::read_file(char *filename) {
+    ANNAPARA*file = &params[0];                    
                                                    
     //read potential file
     if(comm->me == 0) {
@@ -422,20 +422,20 @@ void PairPINN_ADP::read_file(char *filename) {
                     }
                 }
                 if (i == 8 + file->nelements) {
-                    int num_para_pinn = 0;
+                    int num_para_anna = 0;
                     file->ntl = atoi(&t_string[0]);
-                    num_para_pinn++;
+                    num_para_anna++;
                     for (int j = 0; j < t_string.size(); j++) {                                  
                         int j_next = j + 1;
                         if (t_string[j] == '\t' && isdigit(t_string[j_next])) {
-                            if (num_para_pinn == 1)  file->nhl = atoi(&t_string[j_next]);
-                            if (num_para_pinn == 2)  file->nnod = atoi(&t_string[j_next]);
-                            if (num_para_pinn == 3)  file->nout = atoi(&t_string[j_next]);
-                            if (num_para_pinn == 4)  file->nsf = atoi(&t_string[j_next]);
-                            if (num_para_pinn == 5)  file->npsf = atoi(&t_string[j_next]);
-                            if (num_para_pinn == 6)  file->ntsf = atoi(&t_string[j_next]);
-                            if (num_para_pinn == 7)  file->cut = atof(&t_string[j_next]);
-                            num_para_pinn++;
+                            if (num_para_anna == 1)  file->nhl = atoi(&t_string[j_next]);
+                            if (num_para_anna == 2)  file->nnod = atoi(&t_string[j_next]);
+                            if (num_para_anna == 3)  file->nout = atoi(&t_string[j_next]);
+                            if (num_para_anna == 4)  file->nsf = atoi(&t_string[j_next]);
+                            if (num_para_anna == 5)  file->npsf = atoi(&t_string[j_next]);
+                            if (num_para_anna == 6)  file->ntsf = atoi(&t_string[j_next]);
+                            if (num_para_anna == 7)  file->cut = atof(&t_string[j_next]);
+                            num_para_anna++;
                         }
                     }
                 }
@@ -486,14 +486,14 @@ void PairPINN_ADP::read_file(char *filename) {
             int n_lay = file->ntl - 1;
             int n_nod = file->nnod;
             int n_sf = file->nsf;
-            PINN* all_pinn = new PINN[n_elem];
+            ANNA* all_anna = new ANNA[n_elem];
             for (int i = 0; i < n_elem; i++) {
-                all_pinn[i].weight_all = new double** [n_lay];
-                all_pinn[i].bias_all = new double** [n_lay];
-                c_3d_matrix(n_lay, n_nod, n_sf, all_pinn[i].weight_all);
-                c_3d_matrix(n_lay, 1, n_nod, all_pinn[i].bias_all);
+                all_anna[i].weight_all = new double** [n_lay];
+                all_anna[i].bias_all = new double** [n_lay];
+                c_3d_matrix(n_lay, n_nod, n_sf, all_anna[i].weight_all);
+                c_3d_matrix(n_lay, 1, n_nod, all_anna[i].bias_all);
             }
-            file->all_pinn = all_pinn;
+            file->all_anna = all_anna;
             while (true) {
                 int no_layer = 0;
                 bool flag_wb = 0;
@@ -533,11 +533,11 @@ void PairPINN_ADP::read_file(char *filename) {
                         for (int i = 0; i < nrow_w; i++) {
                             int num_values = 0;
                             getline(fin, t_string);
-                            file->all_pinn[type_elem].weight_all[n1d][i][num_values] = atof(&t_string[0]); num_values++;
+                            file->all_anna[type_elem].weight_all[n1d][i][num_values] = atof(&t_string[0]); num_values++;
                             for (int j = 0; j < t_string.size(); j++) {
                                 int j_next = j + 1;
                                 if (t_string[j] == '\t' && ((isdigit(t_string[j_next]) || (int)t_string[j_next] == 45))) {
-                                    file->all_pinn[type_elem].weight_all[n1d][i][num_values] = atof(&t_string[j_next]);   num_values++;
+                                    file->all_anna[type_elem].weight_all[n1d][i][num_values] = atof(&t_string[j_next]);   num_values++;
                                 }
                             }
                         }
@@ -546,11 +546,11 @@ void PairPINN_ADP::read_file(char *filename) {
                         for (int i = 0; i < nrow_b; i++) {
                             int num_values = 0;
                             getline(fin, t_string);
-                            file->all_pinn[type_elem].bias_all[n1d][i][num_values] = atof(&t_string[0]);   num_values++;
+                            file->all_anna[type_elem].bias_all[n1d][i][num_values] = atof(&t_string[0]);   num_values++;
                             for (int j = 0; j < t_string.size(); j++) {
                                 int j_next = j + 1;
                                 if (t_string[j] == '\t' && ((isdigit(t_string[j_next]) || (int)t_string[j_next] == 45))) {
-                                    file->all_pinn[type_elem].bias_all[n1d][i][num_values] = atof(&t_string[j_next]);   num_values++;
+                                    file->all_anna[type_elem].bias_all[n1d][i][num_values] = atof(&t_string[j_next]);   num_values++;
                                 }
                             }
                         }
@@ -588,18 +588,18 @@ void PairPINN_ADP::read_file(char *filename) {
         int nsf = file->nsf;
         int ngp = file->ngp;
         Element* all_elem = new Element[n_ele];
-        PINN* all_pinn = new PINN[n_ele];
+        ANNA* all_anna = new ANNA[n_ele];
 
         for (int i = 0; i < n_ele; i++) {
             all_elem[i].elements = "";
-            all_pinn[i].weight_all = new double** [ntl];
-            all_pinn[i].bias_all = new double** [ntl];
+            all_anna[i].weight_all = new double** [ntl];
+            all_anna[i].bias_all = new double** [ntl];
 
-            c_3d_matrix(ntl, file->nnod, file->nsf, all_pinn[i].weight_all);
-            c_3d_matrix(ntl, 1, file->nnod, all_pinn[i].bias_all);
+            c_3d_matrix(ntl, file->nnod, file->nsf, all_anna[i].weight_all);
+            c_3d_matrix(ntl, 1, file->nnod, all_anna[i].bias_all);
         }
         file->all_elem = all_elem;
-        file->all_pinn = all_pinn;
+        file->all_anna = all_anna;
         file->flagact = new int[ntl];
         file->gparams = new double[ngp];
     }
@@ -623,9 +623,9 @@ void PairPINN_ADP::read_file(char *filename) {
 
         for (int j = 0; j < ntl; j++) {
             for (int k = 0; k < nnod; k++) {
-                MPI_Bcast(file->all_pinn[i].weight_all[j][k], nsf, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+                MPI_Bcast(file->all_anna[i].weight_all[j][k], nsf, MPI_DOUBLE, 0, MPI_COMM_WORLD);
             }
-            MPI_Bcast(file->all_pinn[i].bias_all[j][0], nnod, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+            MPI_Bcast(file->all_anna[i].bias_all[j][0], nnod, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         }
     }
     MPI_Bcast(file->flagact, ntl, MPI_INT, 0, MPI_COMM_WORLD);
@@ -635,7 +635,7 @@ void PairPINN_ADP::read_file(char *filename) {
 /*---------------------------------------------------------------------
                           other subfunctions
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::pinn_adp_Tx(double x, int n, double *Tx) {
+void PairANNA_ADP::anna_adp_Tx(double x, int n, double *Tx) {
     for (int i = 0; i < n; i++) {
         if (i == 0)
             Tx[i] = 1;
@@ -649,29 +649,29 @@ void PairPINN_ADP::pinn_adp_Tx(double x, int n, double *Tx) {
 /*---------------------------------------------------------------------
                     symmetry function (pair, trip)
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::pinn_adp_symmetry_pair(double rij, double fcij, double* G, PINNPARA* params) {
+void PairANNA_ADP::anna_adp_symmetry_pair(double rij, double fcij, double* G, ANNAPARA* params) {
     int npsf = params->npsf;
     double Rc = params->cut;
     double* Tx = new double[npsf];
     memset(Tx, 0, sizeof(double) * npsf);
 
     double x = 2 * rij / Rc - 1;
-    pinn_adp_Tx(x, npsf, Tx);                                                                 
+    anna_adp_Tx(x, npsf, Tx);                                                                 
     for (int m = 0; m < npsf; m++) {
         G[m] += Tx[m] * fcij;
     }
     delete[]Tx;
 }
 
-void PairPINN_ADP::pinn_adp_symmetry_trip(double cos_theta, double fcij, double fcik,
-                                          double* G, PINNPARA* params) {
+void PairANNA_ADP::anna_adp_symmetry_trip(double cos_theta, double fcij, double fcik,
+                                          double* G, ANNAPARA* params) {
     int npsf = params->npsf;
     int ntsf = params->ntsf;
     double* Tx = new double[ntsf];
     memset(Tx, 0, sizeof(double) * ntsf);
 
     double x = 0.5 * (cos_theta + 1);                                                         
-    pinn_adp_Tx(x, ntsf, Tx);
+    anna_adp_Tx(x, ntsf, Tx);
     for (int n = 0; n < ntsf; n++) {
         G[n + npsf] += Tx[n] * fcij * fcik;
     }
@@ -681,7 +681,7 @@ void PairPINN_ADP::pinn_adp_symmetry_trip(double cos_theta, double fcij, double 
 /*---------------------------------------------------------------------
                        feed_forward function
 ----------------------------------------------------------------------*/
-void PairPINN_ADP::dot_add_wxb(int nr, int nc, double** w, double* x, 
+void PairANNA_ADP::dot_add_wxb(int nr, int nc, double** w, double* x, 
                                double** b, double* ans) {                        
     for (int i = 0; i < nr; i++) {
         for (int j = 0; j < nc; j++)
@@ -690,7 +690,7 @@ void PairPINN_ADP::dot_add_wxb(int nr, int nc, double** w, double* x,
     }
 }
 
-void PairPINN_ADP::pinn_adp_actf(int flag_l, int flag_act, int ntl, int nr_w, 
+void PairANNA_ADP::anna_adp_actf(int flag_l, int flag_act, int ntl, int nr_w, 
                                  double* wxb, double* hidly) {                   
     double coeff_a = 1.7;
     double coeff_b = 0.3;
@@ -716,8 +716,8 @@ void PairPINN_ADP::pinn_adp_actf(int flag_l, int flag_act, int ntl, int nr_w,
     }
 }
 
-void PairPINN_ADP::pinn_adp_feed_forward(int itype, double* lparams,
-                                         double* G, PINNPARA* params) {     
+void PairANNA_ADP::anna_adp_feed_forward(int itype, double* lparams,
+                                         double* G, ANNAPARA* params) {     
     int ntl = params->ntl;
     int nsf = params->nsf;
     int nnod = params->nnod;
@@ -727,8 +727,8 @@ void PairPINN_ADP::pinn_adp_feed_forward(int itype, double* lparams,
     double* wxb = new double[nnod];                                          
     for (int i = 0; i < ntl - 1; i++) {                                      
         memset(wxb, 0, sizeof(double) * nnod);
-        double** weight = params->all_pinn[itype].weight_all[i];
-        double** bias = params->all_pinn[itype].bias_all[i];
+        double** weight = params->all_anna[itype].weight_all[i];
+        double** bias = params->all_anna[itype].bias_all[i];
         int nr_w = nnod, nc_w = nnod;
         if (i == 0) {
             nc_w = nsf;
@@ -739,7 +739,7 @@ void PairPINN_ADP::pinn_adp_feed_forward(int itype, double* lparams,
             dot_add_wxb(nr_w, nc_w, weight, hidly[i - 1], bias, wxb);
         }
         int flag_act = params->flagact[i];                                   
-        pinn_adp_actf(i, flag_act, ntl, nr_w, wxb, hidly[i]);
+        anna_adp_actf(i, flag_act, ntl, nr_w, wxb, hidly[i]);
     }
 
     for (int i = 0; i < params->nout; i++)                                   
