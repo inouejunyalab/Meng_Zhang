@@ -10,20 +10,20 @@
 
 #ifdef PAIR_CLASS
 // clang-format off
-PairStyle(pinn_adp/gpu, PairPINNADPGPU);
+PairStyle(anna_adp/gpu, PairANNAADPGPU);
 // clang-format on
 #else
 
-#ifndef LMP_PAIR_PINN_ADP_GPU_H
-#define LMP_PAIR_PINN_ADP_GPU_H
+#ifndef LMP_PAIR_ANNA_ADP_GPU_H
+#define LMP_PAIR_ANNA_ADP_GPU_H
 
-#include "pair_pinn_adp.h"
+#include "pair_anna_adp.h"
 
 namespace LAMMPS_NS {
-    class PairPINNADPGPU : public PairPINN_ADP {
+    class PairANNAADPGPU : public PairANNA_ADP {
     public:
-        PairPINNADPGPU(class LAMMPS*);
-        virtual ~PairPINNADPGPU();
+        PairANNAADPGPU(class LAMMPS*);
+        virtual ~PairANNAADPGPU();
         void compute(int, int);
         void init_style();
         double memory_usage();
