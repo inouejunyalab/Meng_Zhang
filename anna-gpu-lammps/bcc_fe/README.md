@@ -17,14 +17,14 @@
    (a) set correct value of GPU_ARCH in "Makefile.linux" \
    (b) make -f Makefile.linux
   
-3) copy "pair_pinn.h and pair_pinn.cpp" in the "src" directory into lammps/src/MANYBODY directory \
-   cp ./pair_pinn.h     lammps_PATH/src/MANYBODY \
-   cp ./pair_pinn.cpp   lammps_PATH/src/MANYBODY
+3) copy "pair_anna.h and pair_anna.cpp" in the "src" directory into lammps/src/MANYBODY directory \
+   cp ./pair_anna.h     lammps_PATH/src/MANYBODY \
+   cp ./pair_anna.cpp   lammps_PATH/src/MANYBODY
   
-4) copy "pair_pinn_gpu.h and pair_pinn_gpu.cpp" in the "src" directory into lammps/src/GPU directory \
-   cp ./pair_pinn_gpu.h     lammps_PATH/src/GPU \
-   cp ./pair_pinn_gpu.cpp   lammps_PATH/src/GPU \
-   add the name of the two "pair_pinn_gpu*" files into Install.h file in GPU directory
+4) copy "pair_anna_gpu.h and pair_anna_gpu.cpp" in the "src" directory into lammps/src/GPU directory \
+   cp ./pair_anna_gpu.h     lammps_PATH/src/GPU \
+   cp ./pair_anna_gpu.cpp   lammps_PATH/src/GPU \
+   add the name of the two "pair_anna_gpu*" files into Install.h file in GPU directory
 
 5) make mpi
 
@@ -38,8 +38,8 @@
 ## MD simulation in Lammps:
 1) the Newton third law must be on and off for CPU-runs and GPU-runs, respectively: \
    newton on(or off)
-3) pair_style pinn_adp \
-   pair_style * * fe_adp_potential_2310.pinn Fe
+3) pair_style anna_adp \
+   pair_style * * fe_adp_potential_2310.anna Fe
    
 ## Tested systems, GPU cards, Lammps version:
 1) Ubuntu 20.04 (System)
