@@ -8,17 +8,17 @@
 //______________________________________________________
 //------------------------------------------------------
 
-#ifndef LAL_PINN_ADP_H
-#define LAL_PINN_ADP_H
+#ifndef LAL_ANNA_ADP_H
+#define LAL_ANNA_ADP_H
 
-#include "lal_base_pinn_adp.h"
+#include "lal_base_anna_adp.h"
 
 namespace LAMMPS_AL {
 	template <class numtyp, class acctyp>
-	class PINNADP : public BasePinnadp<numtyp, acctyp> {
+	class ANNAADP : public BasePinnadp<numtyp, acctyp> {
 	public:
-		PINNADP();
-		~PINNADP();
+		ANNAADP();
+		~ANNAADP();
 
         /// Clear any previous data and set up for a new LAMMPS run for generic systems
 		/** \param max_nbors initial number of rows in the neighbor matrix
@@ -31,7 +31,7 @@ namespace LAMMPS_AL {
 		  * - -3 if there is an out of memory error
 		  * - -4 if the GPU library was not compiled for GPU
 		  * - -5 Double precision is not supported on card **/
-		  // in the "lal_pinn_adp.cpp" file 
+		  // in the "lal_anna_adp.cpp" file 
 		int init(const int ntypes, const int nlocal, const int nall, 				
 				 const int max_nbors, const double cell_size, 
 				 const double gpu_split, FILE* _screen, 
