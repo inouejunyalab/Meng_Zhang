@@ -14,36 +14,36 @@
 // it may waste some memory. so check the memory overflow is important
 
 #if defined(USE_OPENCL)
-#include "pinn_adp_cl.h"
+#include "anna_adp_cl.h"
 #elif defined(USE_CUDART)
-const char* pinnadp = 0;
+const char* annaadp = 0;
 #else
-#include "pinn_adp_cubin.h"
+#include "anna_adp_cubin.h"
 #endif
 
-#include "lal_pinn_adp.h"
+#include "lal_anna_adp.h"
 #include "mpi.h"
 #include <cassert>
 
 namespace LAMMPS_AL {
-#define PINNADPMT PINNADP<numtyp, acctyp>
+#define ANNAADPMT ANNAADP<numtyp, acctyp>
 	extern Device<PRECISION, ACC_PRECISION> device;
 
 	template <class numtyp, class acctyp>
-	PINNADPMT::PINNADP() : BasePinnadp<numtyp, acctyp>(), _allocated(false) {
+	ANNAADPMT::ANNAADP() : BasePinnadp<numtyp, acctyp>(), _allocated(false) {
 	}
 	template<class numtyp, class acctyp>
-	PINNADPMT::~PINNADP() {
+	ANNAADPMT::~ANNAADP() {
 		clear();
 	}
 
 	template<class numtyp, class acctyp>
-	int PINNADPMT::bytes_per_atom(const int max_nbors) const {
-		return this->bytes_per_atom_pinn_adp(max_nbors);
+	int ANNAADPMT::bytes_per_atom(const int max_nbors) const {
+		return this->bytes_per_atom_anna_adp(max_nbors);
 	}
 
 	template<class numtyp, class acctyp>
-	int PINNADPMT::init(const int ntypes, const int nlocal, const int nall, 
+	int ANNAADPMT::init(const int ntypes, const int nlocal, const int nall, 
 						const int max_nbors, const double cell_size, 
 						const double gpu_split, FILE* _screen, 
 						const int maxspecial, const int ntl, const int nhl, 
@@ -67,9 +67,9 @@ namespace LAMMPS_AL {
 		if (onetype < 0)	onetype = 0;
 #endif	
 		int success;
-		success = this->init_pinn_adp(nlocal, nall, max_nbors, maxspecial, cell_size, 
-									  gpu_split, _screen, pinn_adp, "k_energy", 
-									  "k_pinn_adp", "k_pinn_adp_short_nbor", onetype);
+		success = this->init_anna_adp(nlocal, nall, max_nbors, maxspecial, cell_size, 
+									  gpu_split, _screen, anna_adp, "k_energy", 
+									  "k_anna_adp", "k_anna_adp_short_nbor", onetype);
 		if (success != 0)
 			return success;
 		
@@ -221,7 +221,7 @@ namespace LAMMPS_AL {
 
 	// free all buffer
 	template<class numtyp, class acctyp>
-	void PINNADPMT::clear() {
+	void ANNAADPMT::clear() {
 
 		if (!_allocated)
 			return;
@@ -244,19 +244,19 @@ namespace LAMMPS_AL {
 		_gadp_params.clear();
 		_host_acc.clear();
 
-		this->clear_pinn_adp();
+		this->clear_anna_adp();
 	}
 
 	template <class numtyp, class acctyp>
-	double PINNADPMT::host_memory_usage() const {
-		return this->host_memory_usage_pinn_adp() + sizeof(PINNADP<numtyp, acctyp>);
+	double ANNAADPMT::host_memory_usage() const {
+		return this->host_memory_usage_anna_adp() + sizeof(ANNAADP<numtyp, acctyp>);
 	}
 
 	/*---------------------------------------------------------------------
 	  copy nbor list from host if necessary and then compute atom energies
 	----------------------------------------------------------------------*/
 	template <class numtyp, class acctyp>
-	void PINNADPMT::compute(const int f_ago, const int inum_full, const int nall, const int nlocal, 
+	void ANNAADPMT::compute(const int f_ago, const int inum_full, const int nall, const int nlocal, 
 							double** host_x, int* host_type, int* ilist, int* numj, int** firstneigh, 
 							const bool eflag_in, const bool vflag_in, const bool ea_flag, 
 							const bool va_flag, void** adp_rho, void* adp_mu[], void* adp_lambda[], 
@@ -275,7 +275,7 @@ namespace LAMMPS_AL {
 		if (eflag) eflag = 2;
 		if (vflag) vflag = 2;
 #endif
-		this->set_kernel_pinn_adp(eflag, vflag);
+		this->set_kernel_anna_adp(eflag, vflag);
 
 		if (this->device->time_device()) {
 			this->time_pair.add_time_to_total(time_force.time());				
@@ -283,7 +283,7 @@ namespace LAMMPS_AL {
 			this->atom->add_transfer_time(time_adp_comm2.time());				
 		}
 
-		// ------------Resize _fp, _mu, and _lambda array for PINNADP-----------
+		// ------------Resize _fp, _mu, and _lambda array for ANNAADP-----------
 		if (nall > _max_padp) {
 			_max_padp = nall; 												
 			_adp_rho.resize(_max_padp);
@@ -356,7 +356,7 @@ namespace LAMMPS_AL {
 		build nbor list from host if necessary and then compute atom energies
 	----------------------------------------------------------------------*/
 	template <class numtyp, class acctyp>
-	int** PINNADPMT::compute(const int ago, const int inum_full, const int nall, const int nlocal, double** host_x, 
+	int** ANNAADPMT::compute(const int ago, const int inum_full, const int nall, const int nlocal, double** host_x, 
 							 int* host_type, double* sublo, double* subhi, tagint* tag, 
 							 int** nspecial, tagint** special, const bool eflag_in, 
 							 const bool vflag_in, const bool ea_flag, const bool va_flag, 
@@ -377,7 +377,7 @@ namespace LAMMPS_AL {
 		if (vflag) vflag = 2;
 #endif
 
-		this->set_kernel_pinn_adp(eflag, vflag);
+		this->set_kernel_anna_adp(eflag, vflag);
 
 		if (this->device->time_device()) {
 			this->time_pair.add_time_to_total(time_force.time());				
@@ -385,7 +385,7 @@ namespace LAMMPS_AL {
 			this->atom->add_transfer_time(time_adp_comm2.time());				
 		}
 
-		// -----------------Resize FP and A array for PINNADP-----------------
+		// -----------------Resize FP and A array for ANNAADP-----------------
 		if (nall > _max_padp) {
 			_max_padp = nall; 												
 			_adp_rho.resize(_max_padp);
@@ -467,7 +467,7 @@ namespace LAMMPS_AL {
 					calculate energies, forces, and torques
 	----------------------------------------------------------------------*/
 	template<class numtyp, class acctyp>
-	void PINNADPMT::compute_force(const int nall, int *ilist, const bool eflag, const bool vflag, 
+	void ANNAADPMT::compute_force(const int nall, int *ilist, const bool eflag, const bool vflag, 
 								  const bool ea_flag, const bool va_flag) {
 
 		if (this->ans->inum() == 0)
@@ -495,7 +495,7 @@ namespace LAMMPS_AL {
 				calculate energies, forces, and torques
 	----------------------------------------------------------------------*/
 	template <class numtyp, class acctyp>									
-	int PINNADPMT::loop(const int eflag, const int vflag) {
+	int ANNAADPMT::loop(const int eflag, const int vflag) {
 
 		this->time_pair.start();
 		int ainum = this->ans->inum();
@@ -510,7 +510,7 @@ namespace LAMMPS_AL {
 				short neighbor list and calculate energy 
 	----------------------------------------------------------------------*/
 	template <class numtyp, class acctyp>
-	int PINNADPMT::loop_short_energy(const int nall, const int eflag, const int vflag) {
+	int ANNAADPMT::loop_short_energy(const int nall, const int eflag, const int vflag) {
 
 		const int BX = this->block_size();
 		int GX = static_cast<int>(ceil(static_cast<double>(this->ans->inum()) /
@@ -547,7 +547,7 @@ namespace LAMMPS_AL {
 								calculate force
 	----------------------------------------------------------------------*/
 	template <class numtyp, class acctyp>
-	void PINNADPMT::loop_calcu_force(const int nall, const bool _eflag, const bool _vflag) {
+	void ANNAADPMT::loop_calcu_force(const int nall, const bool _eflag, const bool _vflag) {
 		int eflag, vflag;														
 		if (_eflag)
 			eflag = 1;
@@ -576,5 +576,5 @@ namespace LAMMPS_AL {
 		time_force.stop();
 		time_force_all += time_force.time();
 	}
-	template class PINNADP<PRECISION, ACC_PRECISION>;
+	template class ANNAADP<PRECISION, ACC_PRECISION>;
 }
