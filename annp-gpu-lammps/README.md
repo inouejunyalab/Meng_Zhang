@@ -14,7 +14,7 @@ The results of performance test are for "fe" and "ni" packages, which are carrie
 2) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
 ## LAMMPS Version:
-1) September 2021 stable
+1) August 02 2023 stable
 
 ## License:
 Copyright (C) 2022 Meng Zhang (meng_zhang@metall.t.u-tokyo.ac.jp), Koki Hibi (koki_hibi@metall.t.u-tokyo.ac.jp), Junya Inoue (junya_inoue@metall.t.u-tokyo.ac.jp).
