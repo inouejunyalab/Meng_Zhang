@@ -43,7 +43,7 @@
 ## Tested systems, GPU cards, Lammps version:
 1) Ubuntu 16.04 (System)
 2) Nvidia RTX A5000 (GPU card)
-3) September 2021 stable version (Lammps)
+3) August 02 2023 stable version (Lammps)
 
 ## References:
 1) H. Mori, T. Ozaki, Phys Rev Mater. 4, 040601(R) (2020).
