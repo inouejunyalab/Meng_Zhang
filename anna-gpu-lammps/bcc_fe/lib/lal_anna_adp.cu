@@ -642,7 +642,7 @@ __kernel void k_energy(const __global numtyp4* restrict x_, const __global int* 
 __kernel void k_anna_adp(const __global numtyp4* restrict x_, const int ntypes, 
 						 const int t_per_atom, const __global int* dev_nbor,
 						 const __global int* dev_packed, const int nbor_pitch,
-						 __global acctyp4 *ans, __global acctyp* restrict engv,
+						 __global acctyp3 *ans, __global acctyp* restrict engv,
 						 const int eflag, const int vflag, const int inum,
 						 const __global numtyp* gadp_params, const numtyp2 adp_const,
 						 const int nall, const __global numtyp* restrict adp_rho,
@@ -672,7 +672,7 @@ __kernel void k_anna_adp(const __global numtyp4* restrict x_, const int ntypes,
 	numtyp d3 = gadp_params[15];
 	numtyp q3 = gadp_params[16];	
 
-	acctyp4 f;	f.x = (acctyp)0.0; f.y = (acctyp)0.0; f.z = (acctyp)0.0;
+	acctyp3 f;	f.x = (acctyp)0.0; f.y = (acctyp)0.0; f.z = (acctyp)0.0;
 	acctyp fx, fy, fz, fxi, fyi, fzi, fxj, fyj, fzj;
 	acctyp energy = (acctyp)0.0;
 	acctyp virial[6] = { 0.0 };																		
