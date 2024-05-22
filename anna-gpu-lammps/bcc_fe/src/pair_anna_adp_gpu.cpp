@@ -132,20 +132,24 @@ void PairANNAADPGPU::compute(int eflag, int vflag) {
     if(!success)
         error->one(FLERR,"Insufficient memory on accelerator");
 
-    temp_adp_comm = adp_rho;                                                           
-    comm->forward_comm_pair(this);
+    temp_adp_comm = adp_rho;
+    //comm->forward_comm_pair(this);
+    comm->forward_comm(this);
  
     for(int k = 0; k < n_mu; k++) {
         temp_adp_comm = adp_mu[k];
-        comm->forward_comm_pair(this);
+        //comm->forward_comm_pair(this);
+        comm->forward_comm(this);
     }
     for(int k = 0; k < n_lamb; k++) {
         temp_adp_comm = adp_lambda[k];
-        comm->forward_comm_pair(this);
+        //comm->forward_comm_pair(this);
+        comm->forward_comm(this);
     }
     for(int k = 0; k < nout; k++) {
         temp_adp_comm = ladp_params[k];
-        comm->forward_comm_pair(this);
+        //comm->forward_comm_pair(this);
+        comm->forward_comm(this);
     }
     // compute force of each atom on GPU
     if (gpu_mode != GPU_FORCE)
@@ -257,9 +261,10 @@ void PairANNAADPGPU::init_style() {
     GPU_EXTRA::check_flag(success, error, world);
 
     if (gpu_mode == GPU_FORCE) {
-        int irequest = neighbor->request(this);
-        neighbor->requests[irequest]->half = 0;
-        neighbor->requests[irequest]->full = 1;
+        //int irequest = neighbor->request(this);
+        //neighbor->requests[irequest]->half = 0;
+        //neighbor->requests[irequest]->full = 1;
+        neighbor->add_request(this, NeighConst::REQ_FULL);
     }
 
     if (adp_size == sizeof(double))
