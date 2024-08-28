@@ -1,12 +1,13 @@
 ## ANNA-GPU-Lammps (High-accurate and -efficient potential for BCC iron based on the physically informed artificial neural networks)
 
 ## Description:
-This package contains a new artificial neural networks assistant (ANNA) potential for BCC iron, which has been implementated in CPU and GPU packages of LAMMPS (Reference 1). 
+This package contains a new artificial neural networks assistant (ANNA) potential for BCC iron (Reference 1), which has been implementated in CPU and GPU packages of LAMMPS (Reference 2). 
 
 Please conta us if you have any questions or suggestions for this implementation: meng_zhang@metall.t.u-tokyo.ac.jp/mengzh90@gmail.com (M. Zhang), junya_inoue@metall.t.u-tokyo.ac.jp (J. Inoue)
 
 ## References:
-1) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
+1) M. Zhang, K, Hibi, J. Inoue, Phys. Rev. B. 054110, 285 (110).
+2) S. Plimpton, J. Comput. Phys. 117, 1 (1995).
 
 ## LAMMPS version:
 1) August 02 2023 stable
