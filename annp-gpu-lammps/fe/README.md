@@ -43,7 +43,7 @@
 1) the Newton third law must be opened: \
    newton on
 2) pair_style	annp \
-   pair_style	* * fe_annp_potential.ann Fe
+   pair_coeff	* * fe_annp_potential.ann Fe
 
 
 ## Tested systems, GPU cards, Lammps version:
