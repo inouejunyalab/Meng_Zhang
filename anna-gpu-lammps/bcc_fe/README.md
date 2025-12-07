@@ -39,7 +39,7 @@
 1) the Newton third law must be on and off for CPU-runs and GPU-runs, respectively: \
    newton on(or off)
 3) pair_style anna_adp \
-   pair_style * * fe_adp_potential_2310.anna Fe
+   pair_coeff * * fe_adp_potential_2310.anna Fe
    
 ## Tested systems, GPU cards, Lammps version:
 1) Ubuntu 20.04 (System)
